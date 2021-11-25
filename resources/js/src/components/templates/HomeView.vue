@@ -1,5 +1,7 @@
 <template>
     <div>
-        Home
+        <v-btn>
+            Home
+        </v-btn>
     </div>
 </template>
