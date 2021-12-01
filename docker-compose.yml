@@ -11,6 +11,7 @@ services:
     image: postgres:11-alpine
     restart: always
     environment:
+      POSTGRES_DATABASE: quiz
       POSTGRES_PASSWORD: secret
     volumes:
       - ./database:/var/lib/postgresql/data
