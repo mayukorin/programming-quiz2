@@ -24,7 +24,8 @@ export default {
   },
   methods: {
     handleSignin: function (userInfo) {
-      console.log(userInfo);
+      return this.$store
+        .dispatch("auth/signin", userInfo);
     },
     goToSignUpPage: function () {
       tconsole.log("ok");
