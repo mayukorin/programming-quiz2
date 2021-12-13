@@ -38,6 +38,14 @@ api.interceptors.response.use(
   },
   (error) => {
     console.log("error.resposnse=", error.response);
+    const status = error.response ? error.response.status : 500;
+    let messages;
+    if (status === 400) {
+      messages = [].concat.apply([], Object.values(error.response.data["message"]));
+      console.log(error.response.data);
+      console.log(messages);
+    } 
+    console.log(messages);
     return Promise.reject(error);
   }
 );

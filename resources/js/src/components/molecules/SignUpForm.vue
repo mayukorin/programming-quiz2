@@ -101,6 +101,7 @@ export default {
           this.loadFlag = true;
           this.$nextTick()
             .then(() => {
+              console.log("ok");
               return this.onsignup({
                 email: this.email,
                 name: this.name,

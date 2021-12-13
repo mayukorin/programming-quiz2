@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">登録</span>
+      <span class="headline">登</span>
     </v-card-title>
     <v-card-text>
       <SignUpForm :onsignup="handleSignup" />
@@ -17,7 +17,9 @@ export default {
   },
   methods: {
     handleSignup: function (userInfo) {
+      console.log("signup");
       console.log(userInfo);
+      return this.$store.dispatch("auth/signup", userInfo);
     },
   },
 };

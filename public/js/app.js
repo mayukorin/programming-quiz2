@@ -2324,6 +2324,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.loadFlag = true;
 
           _this.$nextTick().then(function () {
+            console.log("ok");
             return _this.onsignup({
               email: _this.email,
               name: _this.name,
@@ -2419,7 +2420,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleSignup: function handleSignup(userInfo) {
+      console.log("signup");
       console.log(userInfo);
+      return this.$store.dispatch("auth/signup", userInfo);
     }
   }
 });
@@ -2665,6 +2668,16 @@ api.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   console.log("error.resposnse=", error.response);
+  var status = error.response ? error.response.status : 500;
+  var messages;
+
+  if (status === 400) {
+    messages = [].concat.apply([], Object.values(error.response.data["message"]));
+    console.log(error.response.data);
+    console.log(messages);
+  }
+
+  console.log(messages);
   return Promise.reject(error);
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);
@@ -2710,16 +2723,16 @@ var authModule = {
   },
   actions: {
     signup: function signup(context, payload) {
+      console.log("signup2");
+      console.log(payload);
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "post",
-        url: "/users/",
+        url: "api/users/",
         data: {
-          user: {
-            name: payload.name,
-            email: payload.email,
-            password: payload.password,
-            password_confirmation: payload.password_confirmation
-          }
+          name: payload.name,
+          email: payload.email,
+          password: payload.password,
+          password_confirmation: payload.password_confirmation
         }
       });
     },
@@ -7327,7 +7340,7 @@ var render = function () {
     "v-card",
     [
       _c("v-card-title", [
-        _c("span", { staticClass: "headline" }, [_vm._v("登録")]),
+        _c("span", { staticClass: "headline" }, [_vm._v("登")]),
       ]),
       _vm._v(" "),
       _c(

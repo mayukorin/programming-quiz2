@@ -25,16 +25,18 @@ const authModule = {
   },
   actions: {
     signup(context, payload) {
+      console.log("signup2");
+
+
+      console.log(payload);
       return api({
         method: "post",
-        url: "/users/",
+        url: "api/users/",
         data: {
-          user: {
-            name: payload.name,
-            email: payload.email,
-            password: payload.password,
-            password_confirmation: payload.password_confirmation,
-          },
+          name: payload.name,
+          email: payload.email,
+          password: payload.password,
+          password_confirmation: payload.password_confirmation,
         },
       });
     },
