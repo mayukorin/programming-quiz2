@@ -43,8 +43,9 @@ const authModule = {
     renew(context) {
       return api({
         method: "get",
-        url: "/me/",
+        url: "api/auth/me/",
       }).then((response) => {
+        console.log(response.data);
         context.commit("set", { user: response.data });
         return response;
       });
@@ -62,8 +63,9 @@ const authModule = {
         },
       })
     .then((response) => {
-        console.log(response);
-        console.log(context);
+      console.log(response.data.access_token);
+      localStorage.setItem("access", response.data.access_token);
+      return context.dispatch("renew");
     });
     },
     signout(context) {

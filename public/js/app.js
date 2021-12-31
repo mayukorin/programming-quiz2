@@ -2420,9 +2420,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleSignup: function handleSignup(userInfo) {
+      var _this = this;
+
       console.log("signup");
       console.log(userInfo);
-      return this.$store.dispatch("auth/signup", userInfo);
+      return this.$store.dispatch("auth/signup", userInfo).then(function () {
+        _this.$store.dispatch("auth/signin", userInfo);
+      });
     }
   }
 });
@@ -2648,7 +2652,8 @@ api.interceptors.request.use(function (config) {
   var token = localStorage.getItem("access");
 
   if (token) {
-    config.headers.Authorization = "JWT " + token;
+    console.log("tokenあり");
+    config.headers.Authorization = "bearer " + token;
     return config;
   }
 
@@ -2739,8 +2744,9 @@ var authModule = {
     renew: function renew(context) {
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "get",
-        url: "/me/"
+        url: "api/auth/me/"
       }).then(function (response) {
+        console.log(response.data);
         context.commit("set", {
           user: response.data
         });
@@ -2759,8 +2765,9 @@ var authModule = {
           }
         }
       }).then(function (response) {
-        console.log(response);
-        console.log(context);
+        console.log(response.data.access_token);
+        localStorage.setItem("access", response.data.access_token);
+        return context.dispatch("renew");
       });
     },
     signout: function signout(context) {

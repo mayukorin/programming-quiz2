@@ -14,7 +14,8 @@ api.interceptors.request.use(
     // store.dispatch("flashMessage/clearMessages");
     const token = localStorage.getItem("access");
     if (token) {
-      config.headers.Authorization = "JWT " + token;
+      console.log("tokenあり");
+      config.headers.Authorization = "bearer " + token;
       return config;
     }
     return config;

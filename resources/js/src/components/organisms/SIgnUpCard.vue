@@ -19,7 +19,10 @@ export default {
     handleSignup: function (userInfo) {
       console.log("signup");
       console.log(userInfo);
-      return this.$store.dispatch("auth/signup", userInfo);
+      return this.$store.dispatch("auth/signup", userInfo)
+      .then(() => {
+        this.$store.dispatch("auth/signin", userInfo);
+      })
     },
   },
 };

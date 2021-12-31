@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     handleSignin: function (userInfo) {
-
       return this.$store
         .dispatch("auth/signin", userInfo);
     },
