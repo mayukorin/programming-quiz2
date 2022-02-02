@@ -2380,7 +2380,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleSignin: function handleSignin(userInfo) {
-      return this.$store.dispatch("auth/signin", userInfo);
+      var _this = this;
+
+      return this.$store.dispatch("auth/signin", userInfo).then(function (response) {
+        var signInSuccessMessage = "こんにちは，" + response.data.name + "さん";
+        console.log(signInSuccessMessage);
+        var next = _this.$route.query.next || "/";
+
+        _this.$router.replace(next);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     },
     goToSignUpPage: function goToSignUpPage() {
       tconsole.log("ok");
