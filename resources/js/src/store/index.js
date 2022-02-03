@@ -75,9 +75,55 @@ const authModule = {
   },
 };
 
+const flashMessageModule = {
+  namespaced: true,
+  state: {
+    messages: [],
+    color: "",
+  },
+  mutations: {
+    set(state, payload) {
+      if (payload.error) {
+        state.messages = payload.error;
+        state.color = "error";
+      } else if (payload.warning) {
+        state.messages = payload.warning;
+        state.color = "warning";
+      } else if (payload.success) {
+        state.messages = payload.success;
+        state.color = "success";
+      }
+    },
+    clear(state) {
+      state.messages = [];
+      state.color = "";
+    },
+  },
+  actions: {
+    setErrorMessage(context, payload) {
+      context.commit("clear");
+      console.log("actions");
+      console.log(payload.message);
+      context.commit("set", { error: payload.messages });
+    },
+    setWarningMessages(context, payload) {
+      context.commit("clear");
+      context.commit("set", { warning: payload.messages });
+    },
+    setSuccessMessage(context, payload) {
+      context.commit("clear");
+      context.commit("set", { success: payload.messages });
+    },
+    clearMessages(context) {
+      context.commit("clear");
+    },
+  },
+};
+
 const store = new Vuex.Store({
   modules: {
     auth: authModule,
+    flashMessage: flashMessageModule,
   },
 });
 
