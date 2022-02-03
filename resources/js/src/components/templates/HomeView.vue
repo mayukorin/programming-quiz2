@@ -1,7 +1,15 @@
 <template>
     <div>
-        <v-btn>
-            Home
-        </v-btn>
+        <QuizList />
     </div>
 </template>
+<script>
+import QuizList from "../organisms/QuizList";
+
+export default {
+  name: "Home",
+  components: {
+    QuizList
+  },
+};
+</script>
