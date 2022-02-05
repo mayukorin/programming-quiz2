@@ -25,6 +25,6 @@ export default {
               { id: 3, title: "わかってますか3"},
           ]
       }
-  }
+    }
 };
 </script>
