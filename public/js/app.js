@@ -2524,22 +2524,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCard",
   data: function data() {
     return {
       quiz: {
         title: "わかってますか",
-        query: "ああああああああああああああああああああああああ"
-      }
+        query: "ああああああああああああああああああああああああ",
+        choices: [{
+          id: 1,
+          content: "あいうあいうあいうあいう"
+        }, {
+          id: 2,
+          content: "あいうあいうあいうあいう"
+        }, {
+          id: 3,
+          content: "あいうあいうあいうあいう"
+        }, {
+          id: 4,
+          content: "あいうあいうあいうあいう"
+        }],
+        correct_choice_id: 3
+      },
+      selected_choice_id: -1
     };
+  },
+  methods: {
+    isCorrect: function isCorrect(choice_id) {
+      // :disabled="selected_choice_id!=-1"
+      if (this.selected_choice_id !== -1) {
+        if (choice_id === this.quiz.correct_choice_id) return "success";else if (choice_id === this.selected_choice_id) return "error";
+      }
+    }
   }
 });
 
@@ -8182,37 +8198,48 @@ var render = function () {
               "v-row",
               { attrs: { align: "center" } },
               [
-                _c("v-col", { attrs: { cols: "12" } }, [
-                  _c("div", { staticClass: "text-center" }, [
-                    _c(
+                _c(
+                  "v-col",
+                  { attrs: { cols: "12" } },
+                  _vm._l(_vm.quiz.choices, function (choice) {
+                    return _c(
                       "div",
-                      { staticClass: "my-2" },
+                      { key: choice.id, staticClass: "text-center" },
                       [
-                        _c("v-btn", { attrs: { block: "", depressed: "" } }, [
-                          _vm._v(
-                            "\n                                あいうあいうあいうあいうあいう\n                            "
-                          ),
-                        ]),
-                      ],
-                      1
-                    ),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "text-center" }, [
-                    _c(
-                      "div",
-                      { staticClass: "my-2" },
-                      [
-                        _c("v-btn", { attrs: { block: "", depressed: "" } }, [
-                          _vm._v(
-                            "\n                                あいうあいうあいうあいうあいう\n                            "
-                          ),
-                        ]),
-                      ],
-                      1
-                    ),
-                  ]),
-                ]),
+                        _c(
+                          "div",
+                          { staticClass: "my-2" },
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  block: "",
+                                  depressed: "",
+                                  color: _vm.isCorrect(choice.id),
+                                },
+                                on: {
+                                  click: function ($event) {
+                                    _vm.selected_choice_id = choice.id
+                                  },
+                                },
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(choice.content) +
+                                    "\n                            "
+                                ),
+                              ]
+                            ),
+                          ],
+                          1
+                        ),
+                      ]
+                    )
+                  }),
+                  0
+                ),
               ],
               1
             ),
