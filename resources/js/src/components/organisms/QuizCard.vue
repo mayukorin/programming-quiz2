@@ -8,7 +8,7 @@
                     <v-col cols="12">
                         <div class="text-center" v-for="choice in quiz.choices" :key="choice.id">
                             <div class="my-2">
-                                <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)">
+                                <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)" :class="{ 'disable-button': selected_choice_id != -1}">
                                     {{ choice.content }}
                                 </v-btn>
                             </div>
@@ -46,7 +46,12 @@ export default {
                 if (choice_id === this.quiz.correct_choice_id) return "success"
                 else if (choice_id === this.selected_choice_id) return "error"
             }
-        }
+        },
     }
 };
 </script>
+<style scoped>
+    .disable-button {
+        pointer-events: none;
+    }
+</style>
