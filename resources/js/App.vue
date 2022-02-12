@@ -1,7 +1,7 @@
 <template>
     <v-app>
       <Navbar />
-      <v-main class="grey lighten-4">
+      <v-main class="grey lighten-4 main">
       <v-container>
         <v-row justify="center">
           <v-col cols="8">
@@ -25,4 +25,10 @@ export default {
   }),
 };
 </script>
+<style scoped>
+.main {
+  margin-bottom: 0rem;
+  margin-top: 0rem;
+}
+</style>
 

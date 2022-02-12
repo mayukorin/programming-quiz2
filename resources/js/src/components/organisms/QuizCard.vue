@@ -9,13 +9,23 @@
                         <div class="text-center" v-for="choice in quiz.choices" :key="choice.id">
                             <div class="my-2">
                                 <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)" :class="{ 'disable-button': selected_choice_id != -1}">
-                                    {{ choice.content }}
+                                    {{choice.number}} : {{ choice.content }}
                                 </v-btn>
                             </div>
                         </div>
                     </v-col>
                 </v-row>
             </v-card-actions>
+            <div v-show="selected_choice_id!=-1">
+                <v-divider />
+                <v-card-title>
+                    正解：
+                    <span :class="isCorrect(selected_choice_id, '--text')">
+                        {{ quiz.correct_choice.number }}
+                    </span>
+                </v-card-title>
+                <v-card-text>{{ quiz.explanation }}</v-card-text>
+            </div>
         </div>
     </v-card>
 </template>
@@ -29,22 +39,25 @@ export default {
               title: "わかってますか",
               query: "ああああああああああああああああああああああああ",
               choices: [
-                  {id: 1, content: "あいうあいうあいうあいう"},
-                  {id: 2, content: "あいうあいうあいうあいう"},
-                  {id: 3, content: "あいうあいうあいうあいう"},
-                  {id: 4, content: "あいうあいうあいうあいう"},
+                  {id: 1, content: "あいうあいうあいうあいう", number: 1},
+                  {id: 2, content: "あいうあいうあいうあいう", number: 2},
+                  {id: 3, content: "あいうあいうあいうあいう", number: 3},
+                  {id: 4, content: "あいうあいうあいうあいう", number: 4},
               ],
-              correct_choice_id: 3
+              correct_choice: {
+                id: 3, content: "あいうあいうあいうあいう", number: 3
+              },
+              explanation : "あああああああああああああ"
             },
             selected_choice_id: -1,
       }
     },
     methods: {
-        isCorrect(choice_id) {
+        isCorrect(choice_id, addText="") {
             // :disabled="selected_choice_id!=-1"
             if (this.selected_choice_id !== -1) {
-                if (choice_id === this.quiz.correct_choice_id) return "success"
-                else if (choice_id === this.selected_choice_id) return "error"
+                if (choice_id === this.quiz.correct_choice.id) return "success" + addText
+                else if (choice_id === this.selected_choice_id) return "error" + addText
             }
         },
     }
