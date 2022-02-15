@@ -1,8 +1,8 @@
-<<template>
+<template>
   <SignInCard />
 </template>
 <script>
-import SignInCard from "components/organisms/SignInCard.vue";
+import SignInCard from "../organisms/SignInCard.vue";
 export default {
   name: "SignInView",
   components: {
