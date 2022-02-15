@@ -2,7 +2,7 @@
   <SignInCard />
 </template>
 <script>
-import SignInCard from "components/organisms/SignInCard";
+import SignInCard from "components/organisms/SignInCard.vue";
 export default {
   name: "SignInView",
   components: {
