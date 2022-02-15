@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     handleSignup: function (userInfo) {
-      console.log("signup");
+      console.log("signups");
       console.log(userInfo);
       return this.$store.dispatch("auth/signup", userInfo)
       .then(() => {
