@@ -26,10 +26,6 @@ class AddForeignKeyToQuizIdOfChoicesTable extends Migration
      */
     public function down()
     {
-        Schema::table('choices', function (Blueprint $table) {
-            //
-            $table->integer('quiz_id')->unsigned();
-            $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('CASCADE');
-        });
+        
     }
 }

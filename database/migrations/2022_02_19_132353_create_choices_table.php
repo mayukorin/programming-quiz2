@@ -28,7 +28,12 @@ class CreateChoicesTable extends Migration
      * @return void
      */
     public function down()
-    {
+    { 
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->dropForeign('quizzes_correct_choice_id_foreign');
+            $table->dropColumn('correct_choice_id');
+        });
         Schema::dropIfExists('choices');
+        Schema::dropIfExists('quizzes');
     }
 }

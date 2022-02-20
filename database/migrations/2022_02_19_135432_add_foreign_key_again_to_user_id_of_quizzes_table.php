@@ -27,8 +27,6 @@ class AddForeignKeyAgainToUserIdOfQuizzesTable extends Migration
      */
     public function down()
     {
-        Schema::table('quizzes', function (Blueprint $table) {
-            //
-        });
+        
     }
 }
