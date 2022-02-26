@@ -17,6 +17,7 @@ class QuizController extends Controller
 
     public function show($id)
     {
+        Log::debug($_ENV['APP_ENV']);
         $quiz = Quiz::with(['user', 'correct_choice', 'choices'])->find($id);
         return response()->json($quiz, 200);
     }
