@@ -1,24 +1,28 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
+        "dev": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev npm run development",
+        "development": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix",
         "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
+        "watch-poll": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch -- --watch-options-poll=1000",
+        "hot": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "heroku-postbuild": "npm run prod"
+        "heroku-postbuild": "npm run prod",
+        "check-env": "node -e 'console.log(process.env.APP_NAME)'"
     },
     "devDependencies": {
         "axios": "^0.21",
         "bootstrap": "^4.6.0",
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
+        "cross-env": "^7.0.3",
         "deepmerge": "^4.2.2",
+        "dotenv": "^16.0.0",
         "jquery": "^3.6",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
+        "mix-env-file": "^0.1.1",
         "popper.js": "^1.16.1",
         "postcss": "^8.1.14",
         "resolve-url-loader": "^3.1.2",

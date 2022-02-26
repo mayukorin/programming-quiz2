@@ -2538,33 +2538,22 @@ __webpack_require__.r(__webpack_exports__);
   name: "QuizCard",
   data: function data() {
     return {
+      /*
       quiz: {
-        title: "わかってますか",
-        query: "ああああああああああああああああああああああああ",
-        choices: [{
-          id: 1,
-          content: "あいうあいうあいうあいう",
-          number: 1
-        }, {
-          id: 2,
-          content: "あいうあいうあいうあいう",
-          number: 2
-        }, {
-          id: 3,
-          content: "あいうあいうあいうあいう",
-          number: 3
-        }, {
-          id: 4,
-          content: "あいうあいうあいうあいう",
-          number: 4
-        }],
-        correct_choice: {
-          id: 3,
-          content: "あいうあいうあいうあいう",
-          number: 3
+          title: "わかってますか",
+          query: "ああああああああああああああああああああああああ",
+          choices: [
+              {id: 1, content: "あいうあいうあいうあいう", number: 1},
+              {id: 2, content: "あいうあいうあいうあいう", number: 2},
+              {id: 3, content: "あいうあいうあいうあいう", number: 3},
+              {id: 4, content: "あいうあいうあいうあいう", number: 4},
+          ],
+          correct_choice: {
+            id: 3, content: "あいうあいうあいうあいう", number: 3
+          },
+          explanation : "あああああああああああああ"
         },
-        explanation: "あああああああああああああ"
-      },
+        */
       selected_choice_id: -1
     };
   },
@@ -2577,6 +2566,24 @@ __webpack_require__.r(__webpack_exports__);
         if (choice_id === this.quiz.correct_choice.id) return "success" + addText;else if (choice_id === this.selected_choice_id) return "error" + addText;
       }
     }
+  },
+  computed: {
+    quiz: {
+      get: function get() {
+        return this.$store.getters["quiz/getQuiz"];
+      }
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    // this.$route.params.id
+    console.log(this.$route.params.id);
+    this.$store.dispatch("quiz/fetchQuiz", {
+      id: this.$route.params.id
+    }).then(function () {
+      console.log(_this.$store.getters["quiz/getQuiz"]);
+    });
   }
 });
 
@@ -2719,7 +2726,7 @@ __webpack_require__.r(__webpack_exports__);
     handleSignup: function handleSignup(userInfo) {
       var _this = this;
 
-      console.log("signup");
+      console.log("signups");
       console.log(userInfo);
       return this.$store.dispatch("auth/signup", userInfo).then(function () {
         _this.$store.dispatch("auth/signin", userInfo);
@@ -2795,7 +2802,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _organisms_SignInCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../organisms/SignInCard */ "./resources/js/src/components/organisms/SignInCard.vue");
+/* harmony import */ var _organisms_SignInCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../organisms/SignInCard.vue */ "./resources/js/src/components/organisms/SignInCard.vue");
 //
 //
 //
@@ -2803,7 +2810,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SignInView",
   components: {
-    SignInCard: _organisms_SignInCard__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SignInCard: _organisms_SignInCard_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
 });
 
@@ -2820,7 +2827,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _organisms_SignUpCard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../organisms/SignUpCard */ "./resources/js/src/components/organisms/SignUpCard.vue");
+/* harmony import */ var _organisms_SignUpCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../organisms/SignUpCard.vue */ "./resources/js/src/components/organisms/SignUpCard.vue");
 //
 //
 //
@@ -2828,7 +2835,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SignUpView",
   components: {
-    SignUpCard: _organisms_SignUpCard__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SignUpCard: _organisms_SignUpCard_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
 });
 
@@ -2968,7 +2975,7 @@ var routes = [{
   name: "SignUp",
   component: _components_templates_SignUpView_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
-  path: "/quiz-show",
+  path: "/quiz/:id",
   name: "QuizShow",
   component: _components_templates_QuizShowView_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
 }];
@@ -2994,11 +3001,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 var api = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: process.env.VUE_APP_ROOT_API,
-  timeout: 5000,
+  baseURL: "http://127.0.0.1:8081/api/",
+  timeout: 50000,
   headers: {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest"
@@ -3060,6 +3066,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/api */ "./resources/js/src/services/api.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 
@@ -3089,7 +3096,7 @@ var authModule = {
       console.log(payload);
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "post",
-        url: "api/users/",
+        url: "users/",
         data: {
           name: payload.name,
           email: payload.email,
@@ -3101,7 +3108,7 @@ var authModule = {
     renew: function renew(context) {
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "get",
-        url: "api/auth/me/"
+        url: "auth/me/"
       }).then(function (response) {
         console.log(response.data);
         context.commit("set", {
@@ -3114,7 +3121,7 @@ var authModule = {
       console.log("signinまで");
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "post",
-        url: "api/auth/login",
+        url: "auth/login",
         data: {
           session: {
             email: payload.email,
@@ -3183,10 +3190,46 @@ var flashMessageModule = {
     }
   }
 };
+var quizModule = {
+  namespaced: true,
+  state: {
+    quiz: null
+  },
+  mutations: {
+    set: function set(state, payload) {
+      state.quiz = payload.quiz;
+    },
+    clear: function clear(state) {
+      state.quiz = null;
+    }
+  },
+  getters: {
+    getQuiz: function getQuiz(state) {
+      return state.quiz;
+    }
+  },
+  actions: {
+    fetchQuiz: function fetchQuiz(context, payload) {
+      console.log("http://127.0.0.1:8081/api/");
+      console.log(process.env.VUE_APP_ENV);
+      console.log("fetch");
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "get",
+        url: "quizzes/" + payload.id
+      }).then(function (response) {
+        console.log(response.data);
+        context.commit("set", {
+          quiz: response.data
+        }); // return response;
+      });
+    }
+  }
+};
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   modules: {
     auth: authModule,
-    flashMessage: flashMessageModule
+    flashMessage: flashMessageModule,
+    quiz: quizModule
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);

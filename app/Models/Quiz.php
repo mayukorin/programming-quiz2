@@ -11,6 +11,7 @@ class Quiz extends Model
 
     protected $guarded = array('id');
     
+    
     public static $rules = array(
         'user_id' => 'required',
         'title' => 'required',
@@ -26,5 +27,10 @@ class Quiz extends Model
     public function correct_choice()
     {
         return $this->hasOne('App\Models\Choice');
+    }
+
+    public function choices()
+    {
+        return $this->hasMany('App\Models\Choice');
     }
 }

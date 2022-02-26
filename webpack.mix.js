@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-
+require('mix-env-file');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -17,6 +17,8 @@ mix.browserSync({
   }).js('resources/js/app.js', 'public/js')
     .vue()
     .sass('resources/sass/app.scss', 'public/css').version();
+
+mix.env(process.env.ENV_FILE);
 /*
 mix.webpackConfig({
     devServer: {

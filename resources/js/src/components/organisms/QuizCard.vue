@@ -35,6 +35,7 @@ export default {
   
   data() {
       return  {
+          /*
           quiz: {
               title: "わかってますか",
               query: "ああああああああああああああああああああああああ",
@@ -49,6 +50,7 @@ export default {
               },
               explanation : "あああああああああああああ"
             },
+            */
             selected_choice_id: -1,
       }
     },
@@ -60,6 +62,23 @@ export default {
                 else if (choice_id === this.selected_choice_id) return "error" + addText
             }
         },
+    },
+    computed: {
+        quiz: {
+            get () {
+                return this.$store.getters["quiz/getQuiz"];
+            }
+        }
+    },
+    created: function() {
+        // this.$route.params.id
+        console.log(this.$route.params.id);
+        this.$store
+            .dispatch("quiz/fetchQuiz", { id: this.$route.params.id })
+            .then(() => {
+                console.log(this.$store.getters["quiz/getQuiz"]);
+            })
+        
     }
 };
 </script>

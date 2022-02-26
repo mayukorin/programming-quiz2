@@ -31,7 +31,7 @@ const authModule = {
       console.log(payload);
       return api({
         method: "post",
-        url: "api/users/",
+        url: "users/",
         data: {
           name: payload.name,
           email: payload.email,
@@ -43,7 +43,7 @@ const authModule = {
     renew(context) {
       return api({
         method: "get",
-        url: "api/auth/me/",
+        url: "auth/me/",
       }).then((response) => {
         console.log(response.data);
         context.commit("set", { user: response.data });
@@ -54,7 +54,7 @@ const authModule = {
       console.log("signinまで");
       return api({
         method: "post",
-        url: "api/auth/login",
+        url: "auth/login",
         data: {
           session: {
             email: payload.email,
@@ -120,10 +120,47 @@ const flashMessageModule = {
   },
 };
 
+const quizModule = {
+  namespaced: true,
+  state: {
+    quiz: null,
+  },
+  mutations: {
+    set(state, payload) {
+      state.quiz = payload.quiz;
+    },
+    clear(state) {
+      state.quiz = null;
+    },
+  },
+  getters: {
+    getQuiz(state) {
+      return state.quiz;
+    },
+  },
+  actions: {
+    fetchQuiz(context, payload) {
+      console.log(process.env.MIX_VUE_APP_ROOT_API);
+      console.log(process.env.VUE_APP_ENV)
+      console.log("fetch");
+      return api({
+        method: "get",
+        url: "quizzes/"+payload.id,
+      }).then((response) => {
+        console.log(response.data);
+        context.commit("set", { quiz: response.data });
+        // return response;
+      });
+    }
+  }
+};
+
+
 const store = new Vuex.Store({
   modules: {
     auth: authModule,
     flashMessage: flashMessageModule,
+    quiz: quizModule,
   },
 });
 
