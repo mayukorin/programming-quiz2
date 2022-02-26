@@ -6,9 +6,9 @@
         "watch": "mix watch",
         "watch-poll": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch -- --watch-options-poll=1000",
         "hot": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch --hot",
-        "prod": "cross-env NODE_ENV=production npm run production",
-        "production": "cross-env NODE_ENV=production mix --production",
-        "heroku-postbuild": "cross-env NODE_ENV=production npm run prod"
+        "prod": "cross-env NODE_ENV=production ENV_FILE=env/.env.prod npm run production",
+        "production": "cross-env NODE_ENV=production ENV_FILE=env/.env.prod mix --production",
+        "heroku-postbuild": "cross-env NODE_ENV=production ENV_FILE=env/.env.prod npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",
