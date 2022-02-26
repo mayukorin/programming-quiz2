@@ -6,10 +6,9 @@
         "watch": "mix watch",
         "watch-poll": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch -- --watch-options-poll=1000",
         "hot": "cross-env NODE_ENV=development ENV_FILE=env/.env.dev mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production",
-        "heroku-postbuild": "npm run prod",
-        "check-env": "node -e 'console.log(process.env.APP_NAME)'"
+        "prod": "cross-env NODE_ENV=production npm run production",
+        "production": "cross-env NODE_ENV=production mix --production",
+        "heroku-postbuild": "cross-env NODE_ENV=production npm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",
