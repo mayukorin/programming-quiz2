@@ -13,18 +13,19 @@
 import Quiz from "../molecules/Quiz";
 
 export default {
-  name: "QuizList",
-  components: {
-    Quiz
-  },
-  data() {
-      return  {
-          quizList: [
-              { id: 1, title: "わかってますか"},
-              { id: 2, title: "わかってますか2"},
-              { id: 3, title: "わかってますか3"},
-          ]
-      }
+    name: "QuizList",
+    components: {
+        Quiz
+    },
+    created: function() {
+        this.$store.dispatch("quiz/fetchQuizList");
+    },
+    computed: {
+        quizList: {
+            get(){
+                return this.$store.getters["quiz/getQuizList"];
+            }
+        }
     }
 };
 </script>

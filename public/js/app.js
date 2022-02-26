@@ -2575,14 +2575,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
-
-    // this.$route.params.id
-    console.log(this.$route.params.id);
     this.$store.dispatch("quiz/fetchQuiz", {
       id: this.$route.params.id
-    }).then(function () {
-      console.log(_this.$store.getters["quiz/getQuiz"]);
     });
   }
 });
@@ -2618,19 +2612,15 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Quiz: _molecules_Quiz__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  data: function data() {
-    return {
-      quizList: [{
-        id: 1,
-        title: "わかってますか"
-      }, {
-        id: 2,
-        title: "わかってますか2"
-      }, {
-        id: 3,
-        title: "わかってますか3"
-      }]
-    };
+  created: function created() {
+    this.$store.dispatch("quiz/fetchQuizList");
+  },
+  computed: {
+    quizList: {
+      get: function get() {
+        return this.$store.getters["quiz/getQuizList"];
+      }
+    }
   }
 });
 
@@ -3066,7 +3056,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _services_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/api */ "./resources/js/src/services/api.js");
-/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 
@@ -3193,11 +3182,15 @@ var flashMessageModule = {
 var quizModule = {
   namespaced: true,
   state: {
-    quiz: null
+    quiz: null,
+    quizList: []
   },
   mutations: {
-    set: function set(state, payload) {
+    setQuiz: function setQuiz(state, payload) {
       state.quiz = payload.quiz;
+    },
+    setQuizList: function setQuizList(state, payload) {
+      state.quizList = payload.quizList;
     },
     clear: function clear(state) {
       state.quiz = null;
@@ -3206,21 +3199,32 @@ var quizModule = {
   getters: {
     getQuiz: function getQuiz(state) {
       return state.quiz;
+    },
+    getQuizList: function getQuizList(state) {
+      return state.quizList;
     }
   },
   actions: {
     fetchQuiz: function fetchQuiz(context, payload) {
-      console.log("http://127.0.0.1:8081/api/");
-      console.log(process.env.VUE_APP_ENV);
-      console.log("fetch");
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "get",
         url: "quizzes/" + payload.id
       }).then(function (response) {
         console.log(response.data);
-        context.commit("set", {
+        context.commit("setQuiz", {
           quiz: response.data
         }); // return response;
+      });
+    },
+    fetchQuizList: function fetchQuizList(context) {
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "get",
+        url: "quizzes/"
+      }).then(function (response) {
+        console.log(response.data);
+        context.commit("setQuizList", {
+          quizList: response.data
+        });
       });
     }
   }

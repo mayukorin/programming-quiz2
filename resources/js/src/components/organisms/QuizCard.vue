@@ -71,13 +71,7 @@ export default {
         }
     },
     created: function() {
-        // this.$route.params.id
-        console.log(this.$route.params.id);
-        this.$store
-            .dispatch("quiz/fetchQuiz", { id: this.$route.params.id })
-            .then(() => {
-                console.log(this.$store.getters["quiz/getQuiz"]);
-            })
+        this.$store.dispatch("quiz/fetchQuiz", { id: this.$route.params.id });
         
     }
 };

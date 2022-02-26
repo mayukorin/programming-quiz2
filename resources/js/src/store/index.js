@@ -124,10 +124,14 @@ const quizModule = {
   namespaced: true,
   state: {
     quiz: null,
+    quizList: [],
   },
   mutations: {
-    set(state, payload) {
+    setQuiz(state, payload) {
       state.quiz = payload.quiz;
+    },
+    setQuizList(state, payload) {
+      state.quizList = payload.quizList;
     },
     clear(state) {
       state.quiz = null;
@@ -137,21 +141,31 @@ const quizModule = {
     getQuiz(state) {
       return state.quiz;
     },
+    getQuizList(state) {
+      return state.quizList;
+    }
   },
   actions: {
     fetchQuiz(context, payload) {
-      console.log(process.env.MIX_VUE_APP_ROOT_API);
-      console.log(process.env.VUE_APP_ENV)
-      console.log("fetch");
       return api({
         method: "get",
         url: "quizzes/"+payload.id,
       }).then((response) => {
         console.log(response.data);
-        context.commit("set", { quiz: response.data });
+        context.commit("setQuiz", { quiz: response.data });
         // return response;
       });
+    },
+    fetchQuizList(context) {
+      return api({
+        method: "get",
+        url: "quizzes/",
+      }).then((response) => {
+        console.log(response.data);
+        context.commit("setQuizList", { quizList: response.data });
+      })
     }
+
   }
 };
 
