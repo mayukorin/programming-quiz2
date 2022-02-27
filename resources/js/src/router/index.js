@@ -5,6 +5,7 @@ import Home from "../components/templates/HomeView.vue";
 import SignIn from "../components/templates/SignInView.vue";
 import SignUp from "../components/templates/SignUpView.vue";
 import QuizShow from "../components/templates/QuizShowView.vue";
+import NotFound from "../components/templates/NotFoundView.vue";
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
       path: "/quiz/:id",
       name: "QuizShow",
       component: QuizShow
+    },
+    {
+      path: "*",
+      name: "NotFound",
+      component: NotFound
     }
   ];
   
