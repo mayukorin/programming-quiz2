@@ -3251,7 +3251,7 @@ var quizModule = {
     fetchQuizList: function fetchQuizList(context) {
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "get",
-        url: "quizzes/"
+        url: "quizzes"
       }).then(function (response) {
         console.log(response.data);
         context.commit("setQuizList", {

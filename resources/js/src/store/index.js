@@ -159,7 +159,7 @@ const quizModule = {
     fetchQuizList(context) {
       return api({
         method: "get",
-        url: "quizzes/",
+        url: "quizzes",
       }).then((response) => {
         console.log(response.data);
         context.commit("setQuizList", { quizList: response.data });
