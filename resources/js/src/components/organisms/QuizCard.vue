@@ -8,7 +8,7 @@
                     <v-col cols="12">
                         <div class="text-center" v-for="choice in quiz.choices" :key="choice.id">
                             <div class="my-2">
-                                <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)" class="lowercase"  :class="{ 'disable-button': selected_choice_id != -1}">
+                                <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)" class="lowercase padding-0"  :class="{ 'disable-button': selected_choice_id != -1}">
                                     {{choice.number}} : {{ choice.content }}
                                 </v-btn>
                             </div>
@@ -83,4 +83,8 @@ export default {
     .lowercase {
         text-transform: none;
     }
+    .padding-0 {
+        padding: 0px;
+    }
+
 </style>
