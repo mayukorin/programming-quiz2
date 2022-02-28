@@ -18,6 +18,9 @@ class QuizControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->user = User::factory()->create();
+
+
         $this->quiz = Quiz::factory()
             ->for(User::factory()->create())
             ->create();
