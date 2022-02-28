@@ -34,7 +34,8 @@ const routes = [
     {
       path: "/quizzes/new",
       name: "QuizCreate",
-      component: QuizCreate
+      component: QuizCreate,
+      meta: { requiresAuth: true }
     },
     {
       path: "*",
