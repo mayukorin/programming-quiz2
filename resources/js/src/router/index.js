@@ -7,6 +7,7 @@ import SignUp from "../components/templates/SignUpView.vue";
 import QuizShow from "../components/templates/QuizShowView.vue";
 import NotFound from "../components/templates/NotFoundView.vue";
 import QuizCreate from "../components/templates/QuizCreateView.vue";
+import QuizUpdate from "../components/templates/QuizUpdateView.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,12 @@ const routes = [
       path: "/quizzes/new",
       name: "QuizCreate",
       component: QuizCreate,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/quizzes/edit/:id",
+      name: "QuizUpdate",
+      component: QuizUpdate,
       meta: { requiresAuth: true }
     },
     {
