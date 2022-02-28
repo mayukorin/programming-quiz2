@@ -13,7 +13,7 @@ class Quiz extends Model
     
     
     public static $rules = array(
-        'user_id' => 'required',
+        // 'user_id' => 'required',
         'title' => 'required',
         'query' => 'required',
         'explanation' => 'required'
