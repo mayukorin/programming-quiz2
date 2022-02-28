@@ -57,4 +57,44 @@ class QuizControllerTest extends TestCase
         ]);
         
     }
+
+    public function testStore()
+    {
+        $response = $this->actingAs($this->user)->json('POST', '/api/quizzes/', [
+            'quiz' => [
+                'title' => 'aaa',
+                'query' => 'bbb',
+                'explanation' => 'ccc',
+            ],
+            'choices' => [
+                [
+                    'content' => 'c1',
+                    'number' => '1',
+                ],
+                [
+                    'content' => 'c2',
+                    'number' => '2',
+                ],
+                [
+                    'content' => 'c3',
+                    'number' => '3',
+                ],
+                [
+                    'content' => 'c4',
+                    'number' => '4',
+                ]
+            ],
+            'correct_choice_number' => '1'
+        ]);
+
+        // $response->assertStatus(202);
+        $response->assertJson([
+            'title' => 'aaa',
+            'query' => 'bbb',
+            'explanation' => 'ccc',
+        ]);
+        $this->assertSame(Quiz::count(), 1+1);
+        $this->assertSame(Choice::count(), 4+4);
+
+    }
 }
