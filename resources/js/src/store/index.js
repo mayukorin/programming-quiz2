@@ -164,6 +164,15 @@ const quizModule = {
         console.log(response.data);
         context.commit("setQuizList", { quizList: response.data });
       })
+    },
+    createQuiz(context, payload) {
+      return api({
+        method: "post",
+        url: "quizzes",
+        data: payload
+      }).then((response) => {
+        console.log(response.data);
+      })
     }
 
   }

@@ -4,7 +4,10 @@
             <span class="headline">クイズ作成</span>
         </v-card-title>
         <v-card-text>
-            <QuizCreateForm />
+            <QuizCreateForm 
+              @create-quiz="createQuiz"
+              :load-flag="loadFlag"
+            />
         </v-card-text>
     </v-card>
 </template>
@@ -16,6 +19,20 @@ export default {
   components: {
     QuizCreateForm
   },
+  data() {
+    return {
+      loadFlag: false,
+    }
+  },
+  methods: {
+    createQuiz: function(quizInfo) {
+      this.loadFlag = true;
+      this.$store.dispatch("quiz/createQuiz", quizInfo)
+      .then(() => {
+        this.loadFlag = false;
+      });
+    }
+  }
 
 };
 </script>

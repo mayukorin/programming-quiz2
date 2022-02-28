@@ -2361,26 +2361,81 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCreateForm",
   components: {
     Button: _atoms_Button_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  props: {
+    loadFlag: {
+      type: Boolean
+    }
+  },
   data: function data() {
     return {
-      explanation: "",
-      title: "",
-      query: "",
-      choice1: "",
-      choice2: "",
-      choice3: "",
-      choice4: "",
+      quiz: {
+        explanation: "",
+        title: "",
+        query: ""
+      },
+      choices: [{
+        number: 1,
+        content: ""
+      }, {
+        number: 2,
+        content: ""
+      }, {
+        number: 3,
+        content: ""
+      }, {
+        number: 4,
+        content: ""
+      }],
       correctChoice: "選択肢1",
-      radioGroup: 1,
-      checkbox: "",
-      choices: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"]
+      selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"]
     };
+  },
+  methods: {
+    handleClick: function handleClick() {
+      var _this = this;
+
+      this.$refs.observer.validate().then(function (result) {
+        if (result) {
+          _this.$nextTick().then(function () {
+            console.log(_this.correctChoice);
+
+            var correctChoiceNumber = _this.correctChoice.slice(-1);
+
+            console.log(correctChoiceNumber);
+
+            _this.$emit('create-quiz', {
+              quiz: _this.quiz,
+              choices: _this.choices,
+              correct_choice_number: correctChoiceNumber
+            });
+          });
+        }
+      });
+    }
   }
 });
 
@@ -2781,11 +2836,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCreateCard",
   components: {
     QuizCreateForm: _molecules_QuizCreateForm__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      loadFlag: false
+    };
+  },
+  methods: {
+    createQuiz: function createQuiz(quizInfo) {
+      var _this = this;
+
+      this.loadFlag = true;
+      this.$store.dispatch("quiz/createQuiz", quizInfo).then(function () {
+        _this.loadFlag = false;
+      });
+    }
   }
 });
 
@@ -3232,7 +3305,10 @@ var routes = [{
 }, {
   path: "/quizzes/new",
   name: "QuizCreate",
-  component: _components_templates_QuizCreateView_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _components_templates_QuizCreateView_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: "*",
   name: "NotFound",
@@ -3494,6 +3570,15 @@ var quizModule = {
         context.commit("setQuizList", {
           quizList: response.data
         });
+      });
+    },
+    createQuiz: function createQuiz(context, payload) {
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "post",
+        url: "quizzes",
+        data: payload
+      }).then(function (response) {
+        console.log(response.data);
       });
     }
   }
@@ -8715,11 +8800,11 @@ var render = function () {
                           required: "",
                         },
                         model: {
-                          value: _vm.title,
+                          value: _vm.quiz.title,
                           callback: function ($$v) {
-                            _vm.title = $$v
+                            _vm.$set(_vm.quiz, "title", $$v)
                           },
-                          expression: "title",
+                          expression: "quiz.title",
                         },
                       }),
                     ]
@@ -8745,11 +8830,11 @@ var render = function () {
                           required: "",
                         },
                         model: {
-                          value: _vm.query,
+                          value: _vm.quiz.query,
                           callback: function ($$v) {
-                            _vm.query = $$v
+                            _vm.$set(_vm.quiz, "query", $$v)
                           },
-                          expression: "query",
+                          expression: "quiz.query",
                         },
                       }),
                     ]
@@ -8758,124 +8843,53 @@ var render = function () {
               ]),
             }),
             _vm._v(" "),
-            _c("validation-provider", {
-              ref: "choice1Provider",
-              attrs: { name: "選択肢1", rules: "required", id: "choice1" },
-              scopedSlots: _vm._u([
-                {
-                  key: "default",
-                  fn: function (ref) {
-                    var errors = ref.errors
-                    return [
-                      _c("v-text-field", {
-                        ref: "choice1",
-                        attrs: {
-                          "error-messages": errors,
-                          label: "選択肢1",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.choice1,
-                          callback: function ($$v) {
-                            _vm.choice1 = $$v
+            _vm._l(_vm.choices, function (choice) {
+              return _c(
+                "div",
+                { key: choice.number },
+                [
+                  _c("validation-provider", {
+                    ref: "choice" + String(choice.number) + "Provider",
+                    refInFor: true,
+                    attrs: {
+                      name: "選択肢" + String(choice.number),
+                      rules: "required",
+                      id: "choice" + String(choice.number),
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "default",
+                          fn: function (ref) {
+                            var errors = ref.errors
+                            return [
+                              _c("v-text-field", {
+                                ref: "choice" + String(choice.number),
+                                refInFor: true,
+                                attrs: {
+                                  "error-messages": errors,
+                                  label: "選択肢" + String(choice.number),
+                                  required: "",
+                                },
+                                model: {
+                                  value: choice.content,
+                                  callback: function ($$v) {
+                                    _vm.$set(choice, "content", $$v)
+                                  },
+                                  expression: "choice.content",
+                                },
+                              }),
+                            ]
                           },
-                          expression: "choice1",
                         },
-                      }),
-                    ]
-                  },
-                },
-              ]),
-            }),
-            _vm._v(" "),
-            _c("validation-provider", {
-              ref: "choice2Provider",
-              attrs: { name: "選択肢2", rules: "required", id: "choice2" },
-              scopedSlots: _vm._u([
-                {
-                  key: "default",
-                  fn: function (ref) {
-                    var errors = ref.errors
-                    return [
-                      _c("v-text-field", {
-                        ref: "choice2",
-                        attrs: {
-                          "error-messages": errors,
-                          label: "選択肢2",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.choice2,
-                          callback: function ($$v) {
-                            _vm.choice2 = $$v
-                          },
-                          expression: "choice2",
-                        },
-                      }),
-                    ]
-                  },
-                },
-              ]),
-            }),
-            _vm._v(" "),
-            _c("validation-provider", {
-              ref: "choice3Provider",
-              attrs: { name: "選択肢3", rules: "required", id: "choice3" },
-              scopedSlots: _vm._u([
-                {
-                  key: "default",
-                  fn: function (ref) {
-                    var errors = ref.errors
-                    return [
-                      _c("v-text-field", {
-                        ref: "choice3",
-                        attrs: {
-                          "error-messages": errors,
-                          label: "選択肢3",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.choice3,
-                          callback: function ($$v) {
-                            _vm.choice3 = $$v
-                          },
-                          expression: "choice3",
-                        },
-                      }),
-                    ]
-                  },
-                },
-              ]),
-            }),
-            _vm._v(" "),
-            _c("validation-provider", {
-              ref: "choice4Provider",
-              attrs: { name: "選択肢4", rules: "required", id: "choice4" },
-              scopedSlots: _vm._u([
-                {
-                  key: "default",
-                  fn: function (ref) {
-                    var errors = ref.errors
-                    return [
-                      _c("v-text-field", {
-                        ref: "choice4",
-                        attrs: {
-                          "error-messages": errors,
-                          label: "選択肢4",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.choice4,
-                          callback: function ($$v) {
-                            _vm.choice4 = $$v
-                          },
-                          expression: "choice4",
-                        },
-                      }),
-                    ]
-                  },
-                },
-              ]),
+                      ],
+                      null,
+                      true
+                    ),
+                  }),
+                ],
+                1
+              )
             }),
             _vm._v(" "),
             _c(
@@ -8884,7 +8898,7 @@ var render = function () {
               [
                 _c("v-select", {
                   attrs: {
-                    items: _vm.choices,
+                    items: _vm.selectChoicesLabel,
                     "error-messages": _vm.errors,
                     label: "正解の選択肢",
                   },
@@ -8917,11 +8931,11 @@ var render = function () {
                           required: "",
                         },
                         model: {
-                          value: _vm.explanation,
+                          value: _vm.quiz.explanation,
                           callback: function ($$v) {
-                            _vm.explanation = $$v
+                            _vm.$set(_vm.quiz, "explanation", $$v)
                           },
-                          expression: "explanation",
+                          expression: "quiz.explanation",
                         },
                       }),
                     ]
@@ -8948,7 +8962,7 @@ var render = function () {
               1
             ),
           ],
-          1
+          2
         ),
       ]),
     ],
@@ -9517,7 +9531,16 @@ var render = function () {
         _c("span", { staticClass: "headline" }, [_vm._v("クイズ作成")]),
       ]),
       _vm._v(" "),
-      _c("v-card-text", [_c("QuizCreateForm")], 1),
+      _c(
+        "v-card-text",
+        [
+          _c("QuizCreateForm", {
+            attrs: { "load-flag": _vm.loadFlag },
+            on: { "create-quiz": _vm.createQuiz },
+          }),
+        ],
+        1
+      ),
     ],
     1
   )

@@ -10,7 +10,7 @@
             ref="titleProvider"
             >
             <v-text-field
-                v-model="title"
+                v-model="quiz.title"
                 :error-messages="errors"
                 label="タイトル"
                 required
@@ -26,7 +26,7 @@
             ref="queryProvider"
             >
             <v-textarea
-                v-model="query"
+                v-model="quiz.query"
                 :error-messages="errors"
                 label="クイズ内容"
                 required
@@ -34,6 +34,24 @@
             ></v-textarea>
             </validation-provider>
 
+            <div v-for="choice in choices" :key="choice.number">
+                <validation-provider
+                    v-slot="{ errors }"
+                    :name="'選択肢'+String(choice.number)"
+                    rules="required"
+                    :id="'choice'+String(choice.number)"
+                    :ref="'choice'+String(choice.number)+'Provider'"
+                >
+                    <v-text-field
+                        v-model="choice.content"
+                        :error-messages="errors"
+                        :label="'選択肢'+String(choice.number)"
+                        required
+                        :ref="'choice'+String(choice.number)"
+                    ></v-text-field>
+                </validation-provider>
+            </div>
+            <!--
             <validation-provider
             v-slot="{ errors }"
             name="選択肢1"
@@ -97,13 +115,13 @@
                 ref="choice4"
             ></v-text-field>
             </validation-provider>
-
+            -->
             <v-container
                 class="px-0"
                 fluid
             >
             <v-select
-                :items="choices"
+                :items="selectChoicesLabel"
                 :error-messages="errors"
                 label="正解の選択肢"
                 v-model="correctChoice"
@@ -117,7 +135,7 @@
             ref="explanationProvider"
             >
             <v-textarea
-                v-model="explanation"
+                v-model="quiz.explanation"
                 :error-messages="errors"
                 label="解説"
                 required
@@ -141,22 +159,53 @@ export default {
   name: "QuizCreateForm",
   components: {
     Button
-  },
-  data() {
+    },
+    props: {
+        loadFlag: {
+            type: Boolean
+        }
+    },
+    data() {
       return {
-          explanation: "",
-          title: "",
-          query: "",
-          choice1: "",
-          choice2: "",
-          choice3: "",
-          choice4: "",
-          correctChoice: "選択肢1",
-          radioGroup: 1,
-          checkbox: "",
-          choices: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"]
-      }
-  }
+            quiz: {
+                explanation: "",
+                title: "",
+                query: "",
+            },
+            choices: [
+                { number: 1, content: "" },
+                { number: 2, content: "" },
+                { number: 3, content: "" },
+                { number: 4, content: "" }
+            ],
+            correctChoice: "選択肢1",
+            selectChoicesLabel: [
+                "選択肢1",
+                "選択肢2",
+                "選択肢3",
+                "選択肢4",
+            ],
+        }
+    },
+    methods: {
+        handleClick: function () {
+            this.$refs.observer.validate().then((result) => {
+                if (result) {
+                    this.$nextTick()
+                    .then(() => {
+                        console.log(this.correctChoice);
+                        let correctChoiceNumber = this.correctChoice.slice(-1);
+                        console.log(correctChoiceNumber);
+                        this.$emit('create-quiz', {
+                            quiz: this.quiz,
+                            choices: this.choices,
+                            correct_choice_number: correctChoiceNumber
+                        });
+                    });
+                }
+            });
+        }
+    },
 };
 </script>
 <style scoped>
