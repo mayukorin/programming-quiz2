@@ -2995,23 +2995,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "QuizCard",
   data: function data() {
     return {
-      /*
-      quiz: {
-          title: "わかってますか",
-          query: "ああああああああああああああああああああああああ",
-          choices: [
-              {id: 1, content: "あいうあいうあいうあいう", number: 1},
-              {id: 2, content: "あいうあいうあいうあいう", number: 2},
-              {id: 3, content: "あいうあいうあいうあいう", number: 3},
-              {id: 4, content: "あいうあいうあいうあいう", number: 4},
-          ],
-          correct_choice: {
-            id: 3, content: "あいうあいうあいうあいう", number: 3
-          },
-          explanation : "あああああああああああああ"
-        },
-        */
-      selected_choice_id: -1
+      selected_choice_id: -1,
+      showFlag: false
     };
   },
   methods: {
@@ -3032,8 +3017,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    var _this = this;
+
     this.$store.dispatch("quiz/fetchQuiz", {
       id: this.$route.params.id
+    }).then(function () {
+      _this.showFlag = true;
     });
   }
 });

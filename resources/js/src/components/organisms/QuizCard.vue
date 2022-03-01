@@ -1,5 +1,5 @@
 <template>
-    <v-card flat class="mb-1">
+    <v-card flat class="mb-1" v-show="showFlag">
         <div>
             <v-card-title>{{ quiz.title }}</v-card-title>
             <v-card-text>{{ quiz.query }}</v-card-text>
@@ -35,23 +35,8 @@ export default {
   
   data() {
       return  {
-          /*
-          quiz: {
-              title: "わかってますか",
-              query: "ああああああああああああああああああああああああ",
-              choices: [
-                  {id: 1, content: "あいうあいうあいうあいう", number: 1},
-                  {id: 2, content: "あいうあいうあいうあいう", number: 2},
-                  {id: 3, content: "あいうあいうあいうあいう", number: 3},
-                  {id: 4, content: "あいうあいうあいうあいう", number: 4},
-              ],
-              correct_choice: {
-                id: 3, content: "あいうあいうあいうあいう", number: 3
-              },
-              explanation : "あああああああああああああ"
-            },
-            */
             selected_choice_id: -1,
+            showFlag: false
       }
     },
     methods: {
@@ -71,7 +56,10 @@ export default {
         }
     },
     created: function() {
-        this.$store.dispatch("quiz/fetchQuiz", { id: this.$route.params.id });
+        this.$store.dispatch("quiz/fetchQuiz", { id: this.$route.params.id })
+        .then(() => {
+            this.showFlag = true;
+        })
         
     }
 };
