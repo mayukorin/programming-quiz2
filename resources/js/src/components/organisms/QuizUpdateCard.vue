@@ -28,7 +28,15 @@ export default {
     },
     methods: {
         updateQuiz: function(quizInfo) {
-            console.log(quizInfo);
+            this.loadFlag = true;
+            this.$store.dispatch("quiz/updateQuiz", quizInfo)
+            .then(() => {
+                console.log("update ok");
+                this.$router.replace("/quiz/"+this.$route.params.id);
+            })
+            .finally(() => {
+                this.loadFlag = false;
+            });
         }
     },
     computed: {

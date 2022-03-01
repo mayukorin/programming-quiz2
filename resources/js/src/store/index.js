@@ -173,8 +173,16 @@ const quizModule = {
       }).then((response) => {
         console.log(response.data);
       })
-    }
-
+    },
+    updateQuiz(context, payload) {
+      return api({
+        method: "patch",
+        url: "quizzes/"+payload.id,
+        data: payload.editQuiz,
+      }).then((response) => {
+        console.log(response.data);
+      })
+    },
   }
 };
 

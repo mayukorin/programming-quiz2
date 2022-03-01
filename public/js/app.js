@@ -2639,16 +2639,15 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.observer.validate().then(function (result) {
         if (result) {
           _this.$nextTick().then(function () {
-            console.log(_this.correctChoice);
-
             var correctChoiceNumber = _this.correctChoice.slice(-1);
 
-            console.log(correctChoiceNumber);
-
             _this.$emit('update-quiz', {
-              quiz: _this.quiz,
-              choices: _this.choices,
-              correct_choice_number: correctChoiceNumber
+              editQuiz: {
+                quiz: _this.quiz,
+                choices: _this.choices,
+                correct_choice_number: correctChoiceNumber
+              },
+              id: _this.$route.params.id
             });
           });
         }
@@ -2657,14 +2656,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     originQuiz: function originQuiz(_originQuiz) {
-      console.log(_originQuiz);
-      console.log("ok");
       this.quiz.explanation = _originQuiz.explanation;
       this.quiz.title = _originQuiz.title;
       this.quiz.query = _originQuiz.query;
       this.choices = _originQuiz.choices;
-      this.correctChoice = "選択肢" + this.correct_choice.number;
-      console.log(this.quiz);
+      this.correctChoice = "選択肢" + _originQuiz.correct_choice.number;
     }
   }
 });
@@ -3177,7 +3173,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     updateQuiz: function updateQuiz(quizInfo) {
-      console.log(quizInfo);
+      var _this = this;
+
+      this.loadFlag = true;
+      this.$store.dispatch("quiz/updateQuiz", quizInfo).then(function () {
+        console.log("update ok");
+
+        _this.$router.replace("/quiz/" + _this.$route.params.id);
+      })["finally"](function () {
+        _this.loadFlag = false;
+      });
     }
   },
   computed: {
@@ -3188,12 +3193,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.$store.dispatch("quiz/fetchQuiz", {
       id: this.$route.params.id
     }).then(function () {
-      _this.fillFlag = true;
+      _this2.fillFlag = true;
     });
   }
 });
@@ -3906,6 +3911,15 @@ var quizModule = {
         method: "post",
         url: "quizzes",
         data: payload
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    updateQuiz: function updateQuiz(context, payload) {
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "patch",
+        url: "quizzes/" + payload.id,
+        data: payload.editQuiz
       }).then(function (response) {
         console.log(response.data);
       });
@@ -10229,115 +10243,130 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-card", { staticClass: "mb-1", attrs: { flat: "" } }, [
-    _c(
-      "div",
-      [
-        _c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))]),
-        _vm._v(" "),
-        _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.query))]),
-        _vm._v(" "),
-        _c(
-          "v-card-actions",
-          [
-            _c(
-              "v-row",
-              { attrs: { align: "center" } },
-              [
-                _c(
-                  "v-col",
-                  { attrs: { cols: "12" } },
-                  _vm._l(_vm.quiz.choices, function (choice) {
-                    return _c(
-                      "div",
-                      { key: choice.id, staticClass: "text-center" },
-                      [
-                        _c(
-                          "div",
-                          { staticClass: "my-2" },
-                          [
-                            _c(
-                              "v-btn",
-                              {
-                                staticClass: "lowercase padding-0",
-                                class: {
-                                  "disable-button":
-                                    _vm.selected_choice_id != -1,
-                                },
-                                attrs: {
-                                  block: "",
-                                  depressed: "",
-                                  color: _vm.isCorrect(choice.id),
-                                },
-                                on: {
-                                  click: function ($event) {
-                                    _vm.selected_choice_id = choice.id
+  return _c(
+    "v-card",
+    {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.showFlag,
+          expression: "showFlag",
+        },
+      ],
+      staticClass: "mb-1",
+      attrs: { flat: "" },
+    },
+    [
+      _c(
+        "div",
+        [
+          _c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))]),
+          _vm._v(" "),
+          _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.query))]),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c(
+                "v-row",
+                { attrs: { align: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    _vm._l(_vm.quiz.choices, function (choice) {
+                      return _c(
+                        "div",
+                        { key: choice.id, staticClass: "text-center" },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "my-2" },
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  staticClass: "lowercase padding-0",
+                                  class: {
+                                    "disable-button":
+                                      _vm.selected_choice_id != -1,
+                                  },
+                                  attrs: {
+                                    block: "",
+                                    depressed: "",
+                                    color: _vm.isCorrect(choice.id),
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      _vm.selected_choice_id = choice.id
+                                    },
                                   },
                                 },
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(choice.number) +
-                                    " : " +
-                                    _vm._s(choice.content) +
-                                    "\n                            "
-                                ),
-                              ]
-                            ),
-                          ],
-                          1
-                        ),
-                      ]
-                    )
-                  }),
-                  0
-                ),
-              ],
-              1
-            ),
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.selected_choice_id != -1,
-                expression: "selected_choice_id!=-1",
-              },
-            ],
-          },
-          [
-            _c("v-divider"),
-            _vm._v(" "),
-            _c("v-card-title", [
-              _vm._v("\n                正解：\n                "),
-              _c(
-                "span",
-                { class: _vm.isCorrect(_vm.selected_choice_id, "--text") },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.quiz.correct_choice.number) +
-                      "\n                "
+                                [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(choice.number) +
+                                      " : " +
+                                      _vm._s(choice.content) +
+                                      "\n                            "
+                                  ),
+                                ]
+                              ),
+                            ],
+                            1
+                          ),
+                        ]
+                      )
+                    }),
+                    0
                   ),
-                ]
+                ],
+                1
               ),
-            ]),
-            _vm._v(" "),
-            _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.explanation))]),
-          ],
-          1
-        ),
-      ],
-      1
-    ),
-  ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.selected_choice_id != -1,
+                  expression: "selected_choice_id!=-1",
+                },
+              ],
+            },
+            [
+              _c("v-divider"),
+              _vm._v(" "),
+              _c("v-card-title", [
+                _vm._v("\n                正解：\n                "),
+                _c(
+                  "span",
+                  { class: _vm.isCorrect(_vm.selected_choice_id, "--text") },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.quiz.correct_choice.number) +
+                        "\n                "
+                    ),
+                  ]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.explanation))]),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

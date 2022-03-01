@@ -191,13 +191,14 @@ export default {
                 if (result) {
                     this.$nextTick()
                     .then(() => {
-                        console.log(this.correctChoice);
                         let correctChoiceNumber = this.correctChoice.slice(-1);
-                        console.log(correctChoiceNumber);
                         this.$emit('update-quiz', {
-                            quiz: this.quiz,
-                            choices: this.choices,
-                            correct_choice_number: correctChoiceNumber
+                            editQuiz: {
+                                quiz: this.quiz,
+                                choices: this.choices,
+                                correct_choice_number: correctChoiceNumber,
+                            },
+                            id: this.$route.params.id
                         });
                     });
                 }
@@ -206,14 +207,11 @@ export default {
     },
     watch: {
         originQuiz: function(originQuiz) {
-            console.log(originQuiz);
-            console.log("ok");
             this.quiz.explanation = originQuiz.explanation;
             this.quiz.title = originQuiz.title;
             this.quiz.query = originQuiz.query;
             this.choices = originQuiz.choices;
-            this.correctChoice = "選択肢" + this.correct_choice.number;
-            console.log(this.quiz);
+            this.correctChoice = "選択肢" +  originQuiz.correct_choice.number;
         }
     }
 };
