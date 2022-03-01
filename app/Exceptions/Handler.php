@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
 class Handler extends ExceptionHandler
@@ -43,6 +44,12 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => '該当のものが存在しません'
             ], 404);
+        });
+
+        $this->renderable(function (AccessDeniedHttpException $e, $request) {
+            return response()->json([
+                'message' => '不正なアクセスです'
+            ], 403);
         });
     }
 }
