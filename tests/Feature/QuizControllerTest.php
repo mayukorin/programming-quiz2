@@ -55,7 +55,7 @@ class QuizControllerTest extends TestCase
 
     public function testShowWithNonExistQuizId()
     {
-        $response = $this->json('GET', 'api/quizzes/'.strval($this->quiz->id+1));
+        $response = $this->json('GET', 'api/quizzes/'.strval($this->quiz->id+2));
         $response->assertStatus(404);
         $response->assertJson([
             'message' => '該当のものが存在しません'
@@ -63,7 +63,7 @@ class QuizControllerTest extends TestCase
         
     }
 
-    public function testStore()
+    public function testStoreSuccess()
     {
         $response = $this->actingAs($this->user)->json('POST', '/api/quizzes/', [
             'quiz' => [
@@ -100,6 +100,115 @@ class QuizControllerTest extends TestCase
         ]);
         $this->assertSame(Quiz::count(), 1+1);
         $this->assertSame(Choice::count(), 4+4);
+
+    }
+
+    public function testUpdateWithWrongUser()
+    {
+        $response = $this->actingAs($this->user2)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id), [
+            'quiz' => [
+                'title' => 'aaa',
+                'query' => 'bbb',
+                'explanation' => 'ccc',
+            ],
+            'choices' => [
+                [
+                    'content' => 'c1',
+                    'number' => '1',
+                ],
+                [
+                    'content' => 'c2',
+                    'number' => '2',
+                ],
+                [
+                    'content' => 'c3',
+                    'number' => '3',
+                ],
+                [
+                    'content' => 'c4',
+                    'number' => '4',
+                ]
+            ],
+            'correct_choice_number' => '1'
+        ]);
+
+        $response->assertStatus(403);
+        $response->assertJson([
+            'message' => '不正なアクセスです'
+        ]);
+
+    }
+
+    public function testUpdateSuccess()
+    {
+
+        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id), [
+            'quiz' => [
+                'title' => 'bbb',
+                'query' => 'bbb',
+                'explanation' => 'ccc',
+            ],
+            'choices' => [
+                [
+                    'content' => 'cc1',
+                    'number' => '1',
+                ],
+                [
+                    'content' => 'c2',
+                    'number' => '2',
+                ],
+                [
+                    'content' => 'c3',
+                    'number' => '3',
+                ],
+                [
+                    'content' => 'c4',
+                    'number' => '4',
+                ]
+            ],
+            'correct_choice_number' => '2'
+        ]);
+        $response->assertStatus(200);
+        $this->quiz->refresh();
+        $this->assertSame($this->quiz->title, 'bbb');  
+        $this->assertSame($this->quiz->choices()->where('number', 1)->first()->content, 'cc1');    
+        $this->assertSame($this->quiz->correct_choice_id, $this->quiz->choices()->where('number', 2)->first()->id);   
+
+    }
+
+    public function testUpdateWithWrongQuizId()
+    {
+
+        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id+20), [
+            'quiz' => [
+                'title' => 'bbb',
+                'query' => 'bbb',
+                'explanation' => 'ccc',
+            ],
+            'choices' => [
+                [
+                    'content' => 'cc1',
+                    'number' => '1',
+                ],
+                [
+                    'content' => 'c2',
+                    'number' => '2',
+                ],
+                [
+                    'content' => 'c3',
+                    'number' => '3',
+                ],
+                [
+                    'content' => 'c4',
+                    'number' => '4',
+                ]
+            ],
+            'correct_choice_number' => '2'
+        ]);
+        $response->assertStatus(404);
+        $response->assertJson([
+            'message' => '該当のものが存在しません'
+        ]);
 
     }
 }
