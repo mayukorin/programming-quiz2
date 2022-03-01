@@ -10,6 +10,8 @@ class Choice extends Model
     use HasFactory;
 
     protected $guarded = array('id');
+
+    protected $hidden = array('id', 'quiz_id', 'created_at', 'updated_at');
     
     public static $rules = array(
         'quiz_id' => 'required',
