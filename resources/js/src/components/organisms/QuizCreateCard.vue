@@ -29,6 +29,9 @@ export default {
       this.loadFlag = true;
       this.$store.dispatch("quiz/createQuiz", quizInfo)
       .then(() => {
+        this.$router.replace("/");
+      })
+      .finally(() => {
         this.loadFlag = false;
       });
     }

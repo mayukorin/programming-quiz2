@@ -3071,6 +3071,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadFlag = true;
       this.$store.dispatch("quiz/createQuiz", quizInfo).then(function () {
+        _this.$router.replace("/");
+      })["finally"](function () {
         _this.loadFlag = false;
       });
     }
