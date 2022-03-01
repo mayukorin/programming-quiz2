@@ -31,7 +31,9 @@ export default {
             this.loadFlag = true;
             this.$store.dispatch("quiz/updateQuiz", quizInfo)
             .then(() => {
-                console.log("update ok");
+                this.$store.dispatch("flashMessage/setSuccessMessage", {
+                    messages: ["クイズを更新しました"],
+                });
                 this.$router.replace("/quiz/"+this.$route.params.id);
             })
             .finally(() => {

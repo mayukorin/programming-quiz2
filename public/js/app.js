@@ -2941,7 +2941,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     flashMessage: function flashMessage() {
-      if (this.$store.state.flashMessage.messages.length > 0) this.setSnacTrue();else this.setSnacFalse();
+      var messages = this.$store.state.flashMessage.messages;
+      console.log("change");
+      console.log(messages);
+
+      if (messages.length > 0) {
+        this.setSnacTrue();
+
+        if (messages.indexOf("ログインの有効期限切れです．") != -1 && this.$route.path != "/sign-in") {
+          console.log("ok");
+          this.$router.replace({
+            path: "/sign-in",
+            query: {
+              next: this.$route.path
+            }
+          });
+        }
+      } else this.setSnacFalse();
+
       return this.$store.state.flashMessage;
     }
   }
@@ -3071,6 +3088,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadFlag = true;
       this.$store.dispatch("quiz/createQuiz", quizInfo).then(function () {
+        _this.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: ["クイズを新規作成しました"]
+        });
+
         _this.$router.replace("/");
       })["finally"](function () {
         _this.loadFlag = false;
@@ -3168,7 +3189,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadFlag = true;
       this.$store.dispatch("quiz/updateQuiz", quizInfo).then(function () {
-        console.log("update ok");
+        _this.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: ["クイズを更新しました"]
+        });
 
         _this.$router.replace("/quiz/" + _this.$route.params.id);
       })["finally"](function () {
@@ -3238,7 +3261,11 @@ __webpack_require__.r(__webpack_exports__);
 
       return this.$store.dispatch("auth/signin", userInfo).then(function (response) {
         var signInSuccessMessage = "こんにちは，" + response.data.name + "さん";
-        console.log(signInSuccessMessage);
+
+        _this.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: [signInSuccessMessage]
+        });
+
         var next = _this.$route.query.next || "/";
 
         _this.$router.replace(next);
@@ -3247,7 +3274,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     goToSignUpPage: function goToSignUpPage() {
-      tconsole.log("ok");
+      this.$router.replace("/sign-up");
     }
   }
 });
@@ -3286,10 +3313,20 @@ __webpack_require__.r(__webpack_exports__);
     handleSignup: function handleSignup(userInfo) {
       var _this = this;
 
-      console.log("signups");
-      console.log(userInfo);
       return this.$store.dispatch("auth/signup", userInfo).then(function () {
         _this.$store.dispatch("auth/signin", userInfo);
+      }).then(function () {
+        var signUpSuccessMessage = "アカウント登録が完了しました";
+
+        _this.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: [signUpSuccessMessage]
+        });
+
+        var next = _this.$route.query.next || "/";
+
+        _this.$router.replace(next);
+      })["catch"](function (error) {
+        console.log(error);
       });
     }
   }
@@ -3695,14 +3732,54 @@ api.interceptors.response.use(function (response) {
   */
   return response;
 }, function (error) {
+  /*
+  console.log("error.resposnse=", error.response);
+  const status = error.response ? error.response.status : 500;
+  let messages;
+  if (status === 400) {
+    messages = [].concat.apply([], Object.values(error.response.data["message"]));
+    console.log(error.response.data);
+    console.log(messages);
+  } 
+  console.log(messages);
+  */
   console.log("error.resposnse=", error.response);
   var status = error.response ? error.response.status : 500;
   var messages;
 
   if (status === 400) {
-    messages = [].concat.apply([], Object.values(error.response.data["message"]));
+    messages = [].concat.apply([], Object.values(error.response.data));
     console.log(error.response.data);
     console.log(messages);
+    store.dispatch("flashMessage/setWarningMessages", {
+      messages: messages
+    });
+  } else if (status === 403) {
+    messages = [].concat.apply([], ["権限がありません．"]);
+    store.dispatch("flashMessage/setErrorMessage", {
+      messages: messages
+    });
+  } else if (status === 401) {
+    var token = localStorage.getItem("access");
+    var error_messages;
+
+    if (token != null) {
+      error_messages = "ログインの有効期限切れです．";
+    } else {
+      error_messages = "パスワード・メールアドレスに誤りがあるか，登録されていません．";
+    }
+
+    messages = [].concat.apply([], [error_messages]);
+    store.dispatch("auth/signout");
+    console.log("メッセージセット");
+    store.dispatch("flashMessage/setErrorMessage", {
+      messages: messages
+    });
+  } else {
+    messages = [].concat.apply([], ["想定外のエラーです．"]);
+    store.dispatch("flashMessage/setErrorMessage", {
+      messages: messages
+    });
   }
 
   console.log(messages);
@@ -3839,6 +3916,7 @@ var flashMessageModule = {
       });
     },
     setSuccessMessage: function setSuccessMessage(context, payload) {
+      console.log("setSuccess呼ばれる");
       context.commit("clear");
       context.commit("set", {
         success: payload.messages
@@ -9569,6 +9647,7 @@ var render = function () {
                 _c(
                   "Button",
                   {
+                    attrs: { loading: _vm.loadFlag },
                     on: {
                       click: function ($event) {
                         return _vm.handleClick()
@@ -9793,6 +9872,7 @@ var render = function () {
                 _c(
                   "Button",
                   {
+                    attrs: { loading: _vm.loadFlag },
                     on: {
                       click: function ($event) {
                         return _vm.handleClick()
@@ -10581,7 +10661,7 @@ var render = function () {
     "v-card",
     [
       _c("v-card-title", [
-        _c("span", { staticClass: "headline" }, [_vm._v("登")]),
+        _c("span", { staticClass: "headline" }, [_vm._v("アカウント登録")]),
       ]),
       _vm._v(" "),
       _c(

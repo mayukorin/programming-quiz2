@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">登</span>
+      <span class="headline">アカウント登録</span>
     </v-card-title>
     <v-card-text>
       <SignUpForm :onsignup="handleSignup" />
@@ -17,12 +17,21 @@ export default {
   },
   methods: {
     handleSignup: function (userInfo) {
-      console.log("signups");
-      console.log(userInfo);
       return this.$store.dispatch("auth/signup", userInfo)
       .then(() => {
         this.$store.dispatch("auth/signin", userInfo);
       })
+      .then(() => {
+          let signUpSuccessMessage = "アカウント登録が完了しました";
+          this.$store.dispatch("flashMessage/setSuccessMessage", {
+            messages: [signUpSuccessMessage],
+          });
+          const next = this.$route.query.next || "/";
+          this.$router.replace(next);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

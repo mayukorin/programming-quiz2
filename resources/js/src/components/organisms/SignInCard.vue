@@ -28,7 +28,9 @@ export default {
         .dispatch("auth/signin", userInfo)
         .then((response) => {
           let signInSuccessMessage = "こんにちは，" + response.data.name + "さん";
-          console.log(signInSuccessMessage);
+          this.$store.dispatch("flashMessage/setSuccessMessage", {
+            messages: [signInSuccessMessage],
+          });
           const next = this.$route.query.next || "/";
           this.$router.replace(next);
         })  
@@ -37,7 +39,7 @@ export default {
         })
     },
     goToSignUpPage: function () {
-      tconsole.log("ok");
+      this.$router.replace("/sign-up");
     },
   },
 };

@@ -145,7 +145,7 @@
 
 
             <v-row>
-            <Button @click="handleClick()">更新</Button>
+            <Button :loading="loadFlag" @click="handleClick()">更新</Button>
             </v-row>
         </form>
         </validation-observer>

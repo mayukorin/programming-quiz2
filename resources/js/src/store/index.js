@@ -111,6 +111,7 @@ const flashMessageModule = {
       context.commit("set", { warning: payload.messages });
     },
     setSuccessMessage(context, payload) {
+      console.log("setSuccess呼ばれる");
       context.commit("clear");
       context.commit("set", { success: payload.messages });
     },

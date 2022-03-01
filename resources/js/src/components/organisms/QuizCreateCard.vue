@@ -29,6 +29,9 @@ export default {
       this.loadFlag = true;
       this.$store.dispatch("quiz/createQuiz", quizInfo)
       .then(() => {
+        this.$store.dispatch("flashMessage/setSuccessMessage", {
+            messages: ["クイズを新規作成しました"],
+          });
         this.$router.replace("/");
       })
       .finally(() => {
