@@ -4,6 +4,10 @@ import VueRouter from "vue-router";
 import Home from "../components/templates/HomeView.vue";
 import SignIn from "../components/templates/SignInView.vue";
 import SignUp from "../components/templates/SignUpView.vue";
+import QuizShow from "../components/templates/QuizShowView.vue";
+import NotFound from "../components/templates/NotFoundView.vue";
+import QuizCreate from "../components/templates/QuizCreateView.vue";
+import QuizUpdate from "../components/templates/QuizUpdateView.vue";
 
 Vue.use(VueRouter);
 
@@ -23,6 +27,28 @@ const routes = [
       name: "SignUp",
       component: SignUp,
     },
+    {
+      path: "/quiz/:id",
+      name: "QuizShow",
+      component: QuizShow
+    },
+    {
+      path: "/quizzes/new",
+      name: "QuizCreate",
+      component: QuizCreate,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/quizzes/edit/:id",
+      name: "QuizUpdate",
+      component: QuizUpdate,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "*",
+      name: "NotFound",
+      component: NotFound
+    }
   ];
   
   const router = new VueRouter({

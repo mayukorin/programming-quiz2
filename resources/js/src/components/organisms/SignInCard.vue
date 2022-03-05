@@ -25,10 +25,21 @@ export default {
   methods: {
     handleSignin: function (userInfo) {
       return this.$store
-        .dispatch("auth/signin", userInfo);
+        .dispatch("auth/signin", userInfo)
+        .then((response) => {
+          let signInSuccessMessage = "こんにちは，" + response.data.name + "さん";
+          this.$store.dispatch("flashMessage/setSuccessMessage", {
+            messages: [signInSuccessMessage],
+          });
+          const next = this.$route.query.next || "/";
+          this.$router.replace(next);
+        })  
+        .catch((error) => {
+          console.log(error);
+        })
     },
     goToSignUpPage: function () {
-      tconsole.log("ok");
+      this.$router.replace("/sign-up");
     },
   },
 };

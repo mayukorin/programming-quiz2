@@ -22,7 +22,7 @@
           v-slot="{ errors }"
           name="パスワード"
           rules="required|min:6"
-          vid="password"
+          id="password"
           ref="passwordProvider"
         >
           <v-text-field

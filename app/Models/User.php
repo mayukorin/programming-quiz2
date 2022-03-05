@@ -32,6 +32,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'updated_at',
+        'created_at',
     ];
 
     /**
@@ -51,5 +53,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany('App\Models\Quiz');
     }
 }

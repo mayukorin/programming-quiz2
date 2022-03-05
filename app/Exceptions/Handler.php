@@ -4,6 +4,12 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 
 class Handler extends ExceptionHandler
 {
@@ -34,8 +40,16 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            return response()->json([
+                'message' => '該当のものが存在しません'
+            ], 404);
+        });
+
+        $this->renderable(function (AccessDeniedHttpException $e, $request) {
+            return response()->json([
+                'message' => '不正なアクセスです'
+            ], 403);
         });
     }
 }

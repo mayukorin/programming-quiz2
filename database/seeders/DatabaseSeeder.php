@@ -15,5 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call(UsersTableSeeder::class);
+        $this->call(QuizTableSeeder::class);
+        $this->call(ChoiceTableSeeder::class);
+        $this->call(AddCorrectChoiceIdSeeder::class);
     }
 }

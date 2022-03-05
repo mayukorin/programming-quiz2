@@ -5,6 +5,8 @@
 /vendor
 .env
 .env.backup
+.env.testing
+env/
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json
@@ -13,3 +15,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+database/base/
+database/global/
+database/pg*/
+database/postmaster.opts
+database/postmaster.pid
