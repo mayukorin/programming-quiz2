@@ -192,6 +192,7 @@ export default {
                     this.$nextTick()
                     .then(() => {
                         let correctChoiceNumber = this.correctChoice.slice(-1);
+                        console.log(correctChoiceNumber);
                         this.$emit('update-quiz', {
                             editQuiz: {
                                 quiz: this.quiz,

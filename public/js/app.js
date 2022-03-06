@@ -2641,6 +2641,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$nextTick().then(function () {
             var correctChoiceNumber = _this.correctChoice.slice(-1);
 
+            console.log(correctChoiceNumber);
+
             _this.$emit('update-quiz', {
               editQuiz: {
                 quiz: _this.quiz,
@@ -3813,6 +3815,13 @@ api.interceptors.response.use(function (response) {
     _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setErrorMessage", {
       messages: messages
     });
+  } else if (status === 404) {
+    messages = [].concat.apply([], Object.values(error.response.data));
+    console.log(error.response.data);
+    console.log(messages);
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setWarningMessages", {
+      messages: messages
+    });
   } else {
     messages = [].concat.apply([], ["想定外のエラーです．"]);
     _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setErrorMessage", {
@@ -4021,6 +4030,8 @@ var quizModule = {
       });
     },
     updateQuiz: function updateQuiz(context, payload) {
+      console.log("これからupdate");
+      console.log(payload.editQuiz);
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "patch",
         url: "quizzes/" + payload.id,

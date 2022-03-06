@@ -172,6 +172,8 @@ const quizModule = {
       })
     },
     updateQuiz(context, payload) {
+      console.log("これからupdate");
+      console.log(payload.editQuiz);
       return api({
         method: "patch",
         url: "quizzes/"+payload.id,
