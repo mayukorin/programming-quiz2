@@ -3868,6 +3868,7 @@ var authModule = {
     signup: function signup(context, payload) {
       console.log("signup2");
       console.log(payload);
+      console.log("http://127.0.0.1:8081/api/");
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "post",
         url: "users/",

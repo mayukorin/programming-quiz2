@@ -29,6 +29,7 @@ const authModule = {
 
 
       console.log(payload);
+      console.log(process.env.MIX_VUE_APP_ROOT_API);
       return api({
         method: "post",
         url: "users/",
