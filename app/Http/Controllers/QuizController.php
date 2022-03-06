@@ -14,7 +14,8 @@ class QuizController extends Controller
 {
     //
 
-    public function __construct() {
+    public function __construct()
+    {
         // $this->middleware('can:update, quiz')->only('update');
         // $this->authorizeResource(Quiz::class, 'quiz');
     }
@@ -33,9 +34,8 @@ class QuizController extends Controller
 
     public function store(StoreQuiz $request)
     {
-
         $quiz = auth()->user()->quizzes()->create($request->quiz);
-        foreach($request->choices as $choice) {
+        foreach ($request->choices as $choice) {
             $new_choice = $quiz->choices()->create($choice);
             if ($new_choice->number == intval($request->correct_choice_number)) {
                 $quiz->update(['correct_choice_id' => $new_choice->id]);
@@ -46,12 +46,11 @@ class QuizController extends Controller
 
     public function update(StoreQuiz $request, Quiz $quiz)
     {
-    
         $this->authorize('update', $quiz);
-        
+
         $quiz->update($request->quiz);
 
-        foreach($request->choices as $choice) {
+        foreach ($request->choices as $choice) {
             $edit_choice = $quiz->choices()->where('number', $choice['number'])->first();
             $edit_choice->update($choice);
             if ($edit_choice->number == intval($request->correct_choice_number)) {
@@ -59,14 +58,12 @@ class QuizController extends Controller
             }
         }
         return response()->json($quiz, 200);
-        
     }
 
-    public function destroy(Quiz $quiz) 
+    public function destroy(Quiz $quiz)
     {
         $this->authorize('destroy', $quiz);
         $quiz->delete();
         return response()->json(204);
-
     }
 }

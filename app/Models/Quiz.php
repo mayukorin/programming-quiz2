@@ -10,8 +10,8 @@ class Quiz extends Model
     use HasFactory;
 
     protected $guarded = array('id');
-    
-    
+
+
     public static $rules = array(
         'title' => 'required',
         'query' => 'required',
