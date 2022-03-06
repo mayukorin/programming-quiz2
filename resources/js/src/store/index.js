@@ -25,14 +25,9 @@ const authModule = {
   },
   actions: {
     signup(context, payload) {
-      console.log("signup2");
-
-
-      console.log(payload);
-      console.log(process.env.MIX_VUE_APP_ROOT_API);
       return api({
         method: "post",
-        url: "users/",
+        url: "users",
         data: {
           name: payload.name,
           email: payload.email,
