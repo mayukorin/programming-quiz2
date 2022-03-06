@@ -3866,12 +3866,9 @@ var authModule = {
   },
   actions: {
     signup: function signup(context, payload) {
-      console.log("signup2");
-      console.log(payload);
-      console.log("http://127.0.0.1:8081/api/");
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "post",
-        url: "users/",
+        url: "users",
         data: {
           name: payload.name,
           email: payload.email,
@@ -3883,7 +3880,7 @@ var authModule = {
     renew: function renew(context) {
       return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
         method: "get",
-        url: "auth/me/"
+        url: "auth/me"
       }).then(function (response) {
         console.log(response.data);
         context.commit("set", {
