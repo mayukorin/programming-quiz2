@@ -1,6 +1,10 @@
 <template>
     <v-card flat class="mb-1" v-show="showFlag">
         <div>
+             <div class="ma-1" v-show="$store.state.auth.email == quiz.user.email"> 
+                <Button @click='$router.replace("/quizzes/edit/"+quiz.id)'>クイズ編集</Button>
+                <Button @click="deleteQuiz(quiz.id)" :loading="deleteLoadFlag">クイズ削除</Button>
+             </div>
             <v-card-title>{{ quiz.title }}</v-card-title>
             <v-card-text>{{ quiz.query }}</v-card-text>
             <v-card-actions>
@@ -30,13 +34,18 @@
     </v-card>
 </template>
 <script>
+import Button from "../atoms/Button.vue";
+
 export default {
   name: "QuizCard",
-  
+  components: {
+    Button
+  },
   data() {
       return  {
             selected_choice_id: -1,
-            showFlag: false
+            showFlag: false,
+            deleteLoadFlag: false,
       }
     },
     methods: {
@@ -47,6 +56,19 @@ export default {
                 else if (choice_id === this.selected_choice_id) return "error" + addText
             }
         },
+        deleteQuiz(quizId) {
+            this.deleteLoadFlag = true;
+            return this.$store.dispatch("quiz/deleteQuiz", { id: quizId })
+            .then(() => {
+                this.$store.dispatch("flashMessage/setSuccessMessage", {
+                    messages: ["クイズを削除しました"],
+                });
+                this.$router.replace("/");
+            })
+            .finally(() => {
+                this.deleteLoadFlag = false;
+            })
+        }
     },
     computed: {
         quiz: {

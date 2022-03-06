@@ -1,5 +1,5 @@
 <template>
-    <v-container class="my-5">
+    <v-container class="my-5" v-show="showFlag">
         <v-row no-gutters>
             <v-col cols="12" v-for="quiz in quizList" :key="quiz.id">
                 <Quiz
@@ -17,8 +17,17 @@ export default {
     components: {
         Quiz
     },
+    data() {
+      return  {
+            showFlag: false,
+      }
+    },
     created: function() {
-        this.$store.dispatch("quiz/fetchQuizList");
+        this.showFlag = false;
+        this.$store.dispatch("quiz/fetchQuizList")
+        .then(() => {
+            this.showFlag = true;
+        })
     },
     computed: {
         quizList: {

@@ -27,7 +27,7 @@ class QuizPolicy
         return $user->id === $quiz->user_id;
     }
 
-    public function delete(User $user, Quiz $quiz)
+    public function destroy(User $user, Quiz $quiz)
     {
         return $user->id === $quiz->user_id;
     }

@@ -61,4 +61,12 @@ class QuizController extends Controller
         return response()->json($quiz, 200);
         
     }
+
+    public function destroy(Quiz $quiz) 
+    {
+        $this->authorize('destroy', $quiz);
+        $quiz->delete();
+        return response()->json(204);
+
+    }
 }

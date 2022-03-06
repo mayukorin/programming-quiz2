@@ -184,6 +184,14 @@ const quizModule = {
         console.log(response.data);
       })
     },
+    deleteQuiz(context, payload) {
+      return api({
+        method: "delete",
+        url: "/quizzes/"+payload.id,
+      }).then((response) => {
+        console.log(response);
+      })
+    }
   }
 };
 

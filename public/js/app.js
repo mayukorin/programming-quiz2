@@ -2977,6 +2977,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _atoms_Button_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../atoms/Button.vue */ "./resources/js/src/components/atoms/Button.vue");
 //
 //
 //
@@ -3008,12 +3009,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCard",
+  components: {
+    Button: _atoms_Button_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       selected_choice_id: -1,
-      showFlag: false
+      showFlag: false,
+      deleteLoadFlag: false
     };
   },
   methods: {
@@ -3024,6 +3034,22 @@ __webpack_require__.r(__webpack_exports__);
       if (this.selected_choice_id !== -1) {
         if (choice_id === this.quiz.correct_choice.id) return "success" + addText;else if (choice_id === this.selected_choice_id) return "error" + addText;
       }
+    },
+    deleteQuiz: function deleteQuiz(quizId) {
+      var _this = this;
+
+      this.deleteLoadFlag = true;
+      return this.$store.dispatch("quiz/deleteQuiz", {
+        id: quizId
+      }).then(function () {
+        _this.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: ["クイズを削除しました"]
+        });
+
+        _this.$router.replace("/");
+      })["finally"](function () {
+        _this.deleteLoadFlag = false;
+      });
     }
   },
   computed: {
@@ -3034,12 +3060,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.$store.dispatch("quiz/fetchQuiz", {
       id: this.$route.params.id
     }).then(function () {
-      _this.showFlag = true;
+      _this2.showFlag = true;
     });
   }
 });
@@ -3131,8 +3157,18 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Quiz: _molecules_Quiz__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  data: function data() {
+    return {
+      showFlag: false
+    };
+  },
   created: function created() {
-    this.$store.dispatch("quiz/fetchQuizList");
+    var _this = this;
+
+    this.showFlag = false;
+    this.$store.dispatch("quiz/fetchQuizList").then(function () {
+      _this.showFlag = true;
+    });
   },
   computed: {
     quizList: {
@@ -3991,6 +4027,14 @@ var quizModule = {
         data: payload.editQuiz
       }).then(function (response) {
         console.log(response.data);
+      });
+    },
+    deleteQuiz: function deleteQuiz(context, payload) {
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "delete",
+        url: "/quizzes/" + payload.id
+      }).then(function (response) {
+        console.log(response);
       });
     }
   }
@@ -10332,6 +10376,48 @@ var render = function () {
       _c(
         "div",
         [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.$store.state.auth.email == _vm.quiz.user.email,
+                  expression: "$store.state.auth.email == quiz.user.email",
+                },
+              ],
+              staticClass: "ma-1",
+            },
+            [
+              _c(
+                "Button",
+                {
+                  on: {
+                    click: function ($event) {
+                      return _vm.$router.replace("/quizzes/edit/" + _vm.quiz.id)
+                    },
+                  },
+                },
+                [_vm._v("クイズ編集")]
+              ),
+              _vm._v(" "),
+              _c(
+                "Button",
+                {
+                  attrs: { loading: _vm.deleteLoadFlag },
+                  on: {
+                    click: function ($event) {
+                      return _vm.deleteQuiz(_vm.quiz.id)
+                    },
+                  },
+                },
+                [_vm._v("クイズ削除")]
+              ),
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))]),
           _vm._v(" "),
           _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.query))]),
@@ -10508,7 +10594,17 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "v-container",
-    { staticClass: "my-5" },
+    {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.showFlag,
+          expression: "showFlag",
+        },
+      ],
+      staticClass: "my-5",
+    },
     [
       _c(
         "v-row",
