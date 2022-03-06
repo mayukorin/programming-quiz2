@@ -10,9 +10,9 @@
             <v-card-actions>
                 <v-row align="center">
                     <v-col cols="12">
-                        <div class="text-center" v-for="choice in quiz.choices" :key="choice.id">
+                        <div class="text-center" v-for="choice in quiz.choices" :key="choice.number">
                             <div class="my-2">
-                                <v-btn block depressed @click="selected_choice_id=choice.id"   :color="isCorrect(choice.id)" class="lowercase padding-0"  :class="{ 'disable-button': selected_choice_id != -1}">
+                                <v-btn block depressed @click="selected_choice_number=choice.number"   :color="isCorrect(choice.number)" class="lowercase padding-0"  :class="{ 'disable-button': selected_choice_number != -1}">
                                     {{choice.number}} : {{ choice.content }}
                                 </v-btn>
                             </div>
@@ -20,11 +20,11 @@
                     </v-col>
                 </v-row>
             </v-card-actions>
-            <div v-show="selected_choice_id!=-1">
+            <div v-show="selected_choice_number!=-1">
                 <v-divider />
                 <v-card-title>
                     正解：
-                    <span :class="isCorrect(selected_choice_id, '--text')">
+                    <span :class="isCorrect(selected_choice_number, '--text')">
                         {{ quiz.correct_choice.number }}
                     </span>
                 </v-card-title>
@@ -43,17 +43,17 @@ export default {
   },
   data() {
       return  {
-            selected_choice_id: -1,
+            selected_choice_number: -1,
             showFlag: false,
             deleteLoadFlag: false,
       }
     },
     methods: {
-        isCorrect(choice_id, addText="") {
+        isCorrect(choice_number, addText="") {
             // :disabled="selected_choice_id!=-1"
-            if (this.selected_choice_id !== -1) {
-                if (choice_id === this.quiz.correct_choice.id) return "success" + addText
-                else if (choice_id === this.selected_choice_id) return "error" + addText
+            if (this.selected_choice_number !== -1) {
+                if (choice_number === this.quiz.correct_choice.number) return "success" + addText
+                else if (choice_number === this.selected_choice_number) return "error" + addText
             }
         },
         deleteQuiz(quizId) {

@@ -3021,18 +3021,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      selected_choice_id: -1,
+      selected_choice_number: -1,
       showFlag: false,
       deleteLoadFlag: false
     };
   },
   methods: {
-    isCorrect: function isCorrect(choice_id) {
+    isCorrect: function isCorrect(choice_number) {
       var addText = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
 
       // :disabled="selected_choice_id!=-1"
-      if (this.selected_choice_id !== -1) {
-        if (choice_id === this.quiz.correct_choice.id) return "success" + addText;else if (choice_id === this.selected_choice_id) return "error" + addText;
+      if (this.selected_choice_number !== -1) {
+        if (choice_number === this.quiz.correct_choice.number) return "success" + addText;else if (choice_number === this.selected_choice_number) return "error" + addText;
       }
     },
     deleteQuiz: function deleteQuiz(quizId) {
@@ -3734,6 +3734,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/index */ "./resources/js/src/store/index.js");
+
 
 var api = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
   baseURL: "http://127.0.0.1:8081/api/",
@@ -3787,12 +3789,12 @@ api.interceptors.response.use(function (response) {
     messages = [].concat.apply([], Object.values(error.response.data));
     console.log(error.response.data);
     console.log(messages);
-    store.dispatch("flashMessage/setWarningMessages", {
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setWarningMessages", {
       messages: messages
     });
   } else if (status === 403) {
     messages = [].concat.apply([], ["権限がありません．"]);
-    store.dispatch("flashMessage/setErrorMessage", {
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setErrorMessage", {
       messages: messages
     });
   } else if (status === 401) {
@@ -3806,14 +3808,14 @@ api.interceptors.response.use(function (response) {
     }
 
     messages = [].concat.apply([], [error_messages]);
-    store.dispatch("auth/signout");
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("auth/signout");
     console.log("メッセージセット");
-    store.dispatch("flashMessage/setErrorMessage", {
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setErrorMessage", {
       messages: messages
     });
   } else {
     messages = [].concat.apply([], ["想定外のエラーです．"]);
-    store.dispatch("flashMessage/setErrorMessage", {
+    _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("flashMessage/setErrorMessage", {
       messages: messages
     });
   }
@@ -10435,7 +10437,7 @@ var render = function () {
                     _vm._l(_vm.quiz.choices, function (choice) {
                       return _c(
                         "div",
-                        { key: choice.id, staticClass: "text-center" },
+                        { key: choice.number, staticClass: "text-center" },
                         [
                           _c(
                             "div",
@@ -10447,16 +10449,16 @@ var render = function () {
                                   staticClass: "lowercase padding-0",
                                   class: {
                                     "disable-button":
-                                      _vm.selected_choice_id != -1,
+                                      _vm.selected_choice_number != -1,
                                   },
                                   attrs: {
                                     block: "",
                                     depressed: "",
-                                    color: _vm.isCorrect(choice.id),
+                                    color: _vm.isCorrect(choice.number),
                                   },
                                   on: {
                                     click: function ($event) {
-                                      _vm.selected_choice_id = choice.id
+                                      _vm.selected_choice_number = choice.number
                                     },
                                   },
                                 },
@@ -10492,8 +10494,8 @@ var render = function () {
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.selected_choice_id != -1,
-                  expression: "selected_choice_id!=-1",
+                  value: _vm.selected_choice_number != -1,
+                  expression: "selected_choice_number!=-1",
                 },
               ],
             },
@@ -10504,7 +10506,9 @@ var render = function () {
                 _vm._v("\n                正解：\n                "),
                 _c(
                   "span",
-                  { class: _vm.isCorrect(_vm.selected_choice_id, "--text") },
+                  {
+                    class: _vm.isCorrect(_vm.selected_choice_number, "--text"),
+                  },
                   [
                     _vm._v(
                       "\n                    " +
