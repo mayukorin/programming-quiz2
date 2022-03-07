@@ -17,13 +17,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->session;
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->respondWithToken($token);
     }
 
-    public function me() 
+    public function me()
     {
         return response()->json(auth()->user());
     }

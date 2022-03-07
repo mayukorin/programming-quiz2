@@ -10,8 +10,8 @@ class Quiz extends Model
     use HasFactory;
 
     protected $guarded = array('id');
-    
-    
+
+
     public static $rules = array(
         'title' => 'required',
         'query' => 'required',
@@ -22,10 +22,10 @@ class Quiz extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
-    
+
     public function correct_choice()
     {
-        return $this->hasOne('App\Models\Choice');
+        return $this->belongsTo('App\Models\Choice', 'correct_choice_id');
     }
 
     public function choices()

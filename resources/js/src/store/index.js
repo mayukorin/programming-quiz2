@@ -25,13 +25,9 @@ const authModule = {
   },
   actions: {
     signup(context, payload) {
-      console.log("signup2");
-
-
-      console.log(payload);
       return api({
         method: "post",
-        url: "users/",
+        url: "users",
         data: {
           name: payload.name,
           email: payload.email,
@@ -43,7 +39,7 @@ const authModule = {
     renew(context) {
       return api({
         method: "get",
-        url: "auth/me/",
+        url: "auth/me",
       }).then((response) => {
         console.log(response.data);
         context.commit("set", { user: response.data });
@@ -176,6 +172,8 @@ const quizModule = {
       })
     },
     updateQuiz(context, payload) {
+      console.log("これからupdate");
+      console.log(payload.editQuiz);
       return api({
         method: "patch",
         url: "quizzes/"+payload.id,
@@ -184,6 +182,14 @@ const quizModule = {
         console.log(response.data);
       })
     },
+    deleteQuiz(context, payload) {
+      return api({
+        method: "delete",
+        url: "/quizzes/"+payload.id,
+      }).then((response) => {
+        console.log(response);
+      })
+    }
   }
 };
 

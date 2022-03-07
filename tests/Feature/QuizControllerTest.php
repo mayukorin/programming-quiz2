@@ -172,7 +172,8 @@ class QuizControllerTest extends TestCase
         $this->quiz->refresh();
         $this->assertSame($this->quiz->title, 'bbb');  
         $this->assertSame($this->quiz->choices()->where('number', 1)->first()->content, 'cc1');    
-        $this->assertSame($this->quiz->correct_choice_id, $this->quiz->choices()->where('number', 2)->first()->id);   
+        // $this->assertSame($this->quiz->correct_choice_id, $this->quiz->choices()->where('number', 2)->first()->id);   
+        $this->assertSame($this->quiz->correct_choice->id, $this->quiz->choices()->where('number', 2)->first()->id);   
 
     }
 

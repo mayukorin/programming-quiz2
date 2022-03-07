@@ -1,4 +1,6 @@
 import axios from "axios";
+import store from "../store/index";
+
 
 const api = axios.create({
   baseURL: process.env.MIX_VUE_APP_ROOT_API,
@@ -73,6 +75,11 @@ api.interceptors.response.use(
       store.dispatch("auth/signout");
       console.log("メッセージセット");
       store.dispatch("flashMessage/setErrorMessage", { messages: messages });
+    } else if (status === 404) {
+      messages = [].concat.apply([], Object.values(error.response.data));
+      console.log(error.response.data);
+      console.log(messages);
+      store.dispatch("flashMessage/setWarningMessages", { messages: messages });
     } else {
       messages = [].concat.apply([], ["想定外のエラーです．"]);
       store.dispatch("flashMessage/setErrorMessage", { messages: messages });
