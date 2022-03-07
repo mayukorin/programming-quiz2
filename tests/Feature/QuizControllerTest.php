@@ -26,20 +26,18 @@ class QuizControllerTest extends TestCase
             ->for($this->user)
             ->create();
 
-        
+
         for ($i = 1; $i <= 4; $i++) {
             $choice = Choice::factory()
                 ->for($this->quiz)
                 ->create(
                     ['number' => $i]
-                );   
+                );
 
             if ($i == 1) {
                 $this->quiz->update(['correct_choice_id' => $choice->id]);
             }
         }
-
-        
     }
     /**
      * A basic feature test example.
@@ -49,18 +47,17 @@ class QuizControllerTest extends TestCase
 
     public function testShowWithExistQuizId()
     {
-        $response = $this->json('GET', 'api/quizzes/'.strval($this->quiz->id));
+        $response = $this->json('GET', 'api/quizzes/' . strval($this->quiz->id));
         $response->assertStatus(200);
     }
 
     public function testShowWithNonExistQuizId()
     {
-        $response = $this->json('GET', 'api/quizzes/'.strval($this->quiz->id+2));
+        $response = $this->json('GET', 'api/quizzes/' . strval($this->quiz->id + 2));
         $response->assertStatus(404);
         $response->assertJson([
             'message' => '該当のものが存在しません'
         ]);
-        
     }
 
     public function testStoreSuccess()
@@ -98,14 +95,13 @@ class QuizControllerTest extends TestCase
             'query' => 'bbb',
             'explanation' => 'ccc',
         ]);
-        $this->assertSame(Quiz::count(), 1+1);
-        $this->assertSame(Choice::count(), 4+4);
-
+        $this->assertSame(Quiz::count(), 1 + 1);
+        $this->assertSame(Choice::count(), 4 + 4);
     }
 
     public function testUpdateWithWrongUser()
     {
-        $response = $this->actingAs($this->user2)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id), [
+        $response = $this->actingAs($this->user2)->json('PATCH', '/api/quizzes/' . strval($this->quiz->id), [
             'quiz' => [
                 'title' => 'aaa',
                 'query' => 'bbb',
@@ -136,13 +132,12 @@ class QuizControllerTest extends TestCase
         $response->assertJson([
             'message' => '不正なアクセスです'
         ]);
-
     }
 
     public function testUpdateSuccess()
     {
 
-        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id), [
+        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/' . strval($this->quiz->id), [
             'quiz' => [
                 'title' => 'bbb',
                 'query' => 'bbb',
@@ -170,17 +165,16 @@ class QuizControllerTest extends TestCase
         ]);
         $response->assertStatus(200);
         $this->quiz->refresh();
-        $this->assertSame($this->quiz->title, 'bbb');  
-        $this->assertSame($this->quiz->choices()->where('number', 1)->first()->content, 'cc1');    
+        $this->assertSame($this->quiz->title, 'bbb');
+        $this->assertSame($this->quiz->choices()->where('number', 1)->first()->content, 'cc1');
         // $this->assertSame($this->quiz->correct_choice_id, $this->quiz->choices()->where('number', 2)->first()->id);   
-        $this->assertSame($this->quiz->correct_choice->id, $this->quiz->choices()->where('number', 2)->first()->id);   
-
+        $this->assertSame($this->quiz->correct_choice->id, $this->quiz->choices()->where('number', 2)->first()->id);
     }
 
     public function testUpdateWithWrongQuizId()
     {
 
-        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/'.strval($this->quiz->id+20), [
+        $response = $this->actingAs($this->user)->json('PATCH', '/api/quizzes/' . strval($this->quiz->id + 20), [
             'quiz' => [
                 'title' => 'bbb',
                 'query' => 'bbb',
@@ -210,6 +204,33 @@ class QuizControllerTest extends TestCase
         $response->assertJson([
             'message' => '該当のものが存在しません'
         ]);
+    }
 
+    public function testDestroySuccess()
+    {
+        $quiz_id = $this->quiz->id;
+        $response = $this->actingAs($this->user)->json('DELETE', '/api/quizzes/' . strval($quiz_id));
+        $response->assertStatus(204);
+        $this->assertFalse(Quiz::where('id', $quiz_id)->exists());
+    }
+
+    public function testDestroyWithWrongUser()
+    {
+        $response = $this->actingAs($this->user2)->json('DELETE', '/api/quizzes/' . strval($this->quiz->id));
+
+        $response->assertStatus(403);
+        $response->assertJson([
+            'message' => '不正なアクセスです'
+        ]);
+    }
+
+    public function testDestroyWithWrongQuizId()
+    {
+
+        $response = $this->actingAs($this->user)->json('DELETE', '/api/quizzes/' . strval($this->quiz->id + 20));
+        $response->assertStatus(404);
+        $response->assertJson([
+            'message' => '該当のものが存在しません'
+        ]);
     }
 }
