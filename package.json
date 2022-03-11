@@ -50,6 +50,7 @@
         "vuex": "^3.6.2"
     },
     "dependencies": {
+        "@mdi/font": "^6.5.95",
         "vee-validate": "^3.4.14"
     }
 }
