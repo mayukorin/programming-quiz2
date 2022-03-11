@@ -7,6 +7,14 @@
              </div>
             <v-card-title>{{ quiz.title }}</v-card-title>
             <v-card-text>{{ quiz.query }}</v-card-text>
+            <v-card-text>
+                <span>
+                    <v-icon class="mr-1">mdi-tag</v-icon>
+                    <span class="mr-1" v-for="tag in tags" :key="tag.name">
+                        {{ tag.name }}
+                    </span>
+                </span>
+            </v-card-text>
             <v-card-actions>
                 <v-row align="center">
                     <v-col cols="12">
@@ -46,6 +54,11 @@ export default {
             selected_choice_number: -1,
             showFlag: false,
             deleteLoadFlag: false,
+            tags: [
+                {name: "Vue"}, 
+                {name: "javascript"}, 
+                {name: "Java"}
+            ]
       }
     },
     methods: {
