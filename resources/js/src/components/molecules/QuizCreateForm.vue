@@ -142,10 +142,47 @@
                 ref="explanation"
             ></v-textarea>
             </validation-provider>
-
-
+            
+            <div class="tag-caption">記事につけるタグ</div>
+            <div v-for="(tagName, index) in tags" :key="index">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="タグ"
+                    rules="required"
+                    id="tag"
+                    ref="tagProvider"
+                >
+                    <v-container
+                        class="px-0"
+                        fluid
+                    >
+                        <v-row>
+                            <v-col
+                                cols="12"
+                                md="10"
+                            >
+                                <v-autocomplete
+                                    v-model="tags[index]"
+                                    :items="items"
+                                    :error-messages="errors"
+                                    label="タグ"
+                                    required
+                                    ref="tag"
+                                ></v-autocomplete>
+                            </v-col>
+                            <v-col
+                                cols="2"
+                                md="2"
+                            >
+                                <Button @click="deleteTag(index)">削除</Button>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </validation-provider>
+            </div>
+            <Button @click="addTag()" v-if="!isTagMax">タグ追加</Button>
             <v-row>
-            <Button :loading="loadFlag" @click="handleClick()">作成</Button>
+                <Button :loading="loadFlag" @click="handleClick()">作成</Button>
             </v-row>
         </form>
         </validation-observer>
@@ -185,6 +222,8 @@ export default {
                 "選択肢3",
                 "選択肢4",
             ],
+            tags: [""],
+            items: ["Vue", "javascript", "Java"]
         }
     },
     methods: {
@@ -204,8 +243,19 @@ export default {
                     });
                 }
             });
+        },
+        deleteTag: function(index) {
+            this.tags.splice(index, 1);
+        },
+        addTag: function() {
+            this.tags.push('');
         }
     },
+    computed: {
+        isTagMax() {
+            return (this.tags.length >= 5);
+        }
+    }
 };
 </script>
 <style scoped>
@@ -214,5 +264,8 @@ export default {
     }
     label + input[type="radio"] {
         margin-left: 8em;
+    }
+    .tag-caption {
+        font-size: 16px!important;
     }
 </style>

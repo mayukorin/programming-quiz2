@@ -2448,7 +2448,9 @@ __webpack_require__.r(__webpack_exports__);
         content: ""
       }],
       correctChoice: "選択肢1",
-      selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"]
+      selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"],
+      tags: [""],
+      items: ["Vue", "javascript", "Java"]
     };
   },
   methods: {
@@ -2472,6 +2474,17 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    deleteTag: function deleteTag(index) {
+      this.tags.splice(index, 1);
+    },
+    addTag: function addTag() {
+      this.tags.push('');
+    }
+  },
+  computed: {
+    isTagMax: function isTagMax() {
+      return this.tags.length >= 5;
     }
   }
 });
@@ -3052,6 +3065,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCard",
@@ -3062,7 +3083,14 @@ __webpack_require__.r(__webpack_exports__);
     return {
       selected_choice_number: -1,
       showFlag: false,
-      deleteLoadFlag: false
+      deleteLoadFlag: false,
+      tags: [{
+        name: "Vue"
+      }, {
+        name: "javascript"
+      }, {
+        name: "Java"
+      }]
     };
   },
   methods: {
@@ -3597,19 +3625,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _src_router_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/router/index.js */ "./resources/js/src/router/index.js");
 /* harmony import */ var _src_store_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/store/index.js */ "./resources/js/src/store/index.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 /* harmony import */ var _src_plugins_vuetify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/plugins/vuetify */ "./resources/js/src/plugins/vuetify.js");
 /* harmony import */ var _src_plugins_vee_validate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/plugins/vee-validate */ "./resources/js/src/plugins/vee-validate.js");
+/* harmony import */ var _mdi_font_css_materialdesignicons_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mdi/font/css/materialdesignicons.css */ "./node_modules/@mdi/font/css/materialdesignicons.css");
 
 
 
 
 
 
-new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
+
+new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
   router: _src_router_index_js__WEBPACK_IMPORTED_MODULE_0__["default"],
   render: function render(h) {
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
@@ -9924,6 +9954,109 @@ var render = function () {
               ]),
             }),
             _vm._v(" "),
+            _c("div", { staticClass: "tag-caption" }, [
+              _vm._v("記事につけるタグ"),
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.tags, function (tagName, index) {
+              return _c(
+                "div",
+                { key: index },
+                [
+                  _c("validation-provider", {
+                    ref: "tagProvider",
+                    refInFor: true,
+                    attrs: { name: "タグ", rules: "required", id: "tag" },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "default",
+                          fn: function (ref) {
+                            var errors = ref.errors
+                            return [
+                              _c(
+                                "v-container",
+                                { staticClass: "px-0", attrs: { fluid: "" } },
+                                [
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "10" } },
+                                        [
+                                          _c("v-autocomplete", {
+                                            ref: "tag",
+                                            refInFor: true,
+                                            attrs: {
+                                              items: _vm.items,
+                                              "error-messages": errors,
+                                              label: "タグ",
+                                              required: "",
+                                            },
+                                            model: {
+                                              value: _vm.tags[index],
+                                              callback: function ($$v) {
+                                                _vm.$set(_vm.tags, index, $$v)
+                                              },
+                                              expression: "tags[index]",
+                                            },
+                                          }),
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "2", md: "2" } },
+                                        [
+                                          _c(
+                                            "Button",
+                                            {
+                                              on: {
+                                                click: function ($event) {
+                                                  return _vm.deleteTag(index)
+                                                },
+                                              },
+                                            },
+                                            [_vm._v("削除")]
+                                          ),
+                                        ],
+                                        1
+                                      ),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                1
+                              ),
+                            ]
+                          },
+                        },
+                      ],
+                      null,
+                      true
+                    ),
+                  }),
+                ],
+                1
+              )
+            }),
+            _vm._v(" "),
+            !_vm.isTagMax
+              ? _c(
+                  "Button",
+                  {
+                    on: {
+                      click: function ($event) {
+                        return _vm.addTag()
+                      },
+                    },
+                  },
+                  [_vm._v("タグ追加")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "v-row",
               [
@@ -10660,6 +10793,26 @@ var render = function () {
           _c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))]),
           _vm._v(" "),
           _c("v-card-text", [_vm._v(_vm._s(_vm.quiz.query))]),
+          _vm._v(" "),
+          _c("v-card-text", [
+            _c(
+              "span",
+              [
+                _c("v-icon", { staticClass: "mr-1" }, [_vm._v("mdi-tag")]),
+                _vm._v(" "),
+                _vm._l(_vm.tags, function (tag) {
+                  return _c("span", { key: tag.name, staticClass: "mr-1" }, [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(tag.name) +
+                        "\n                "
+                    ),
+                  ])
+                }),
+              ],
+              2
+            ),
+          ]),
           _vm._v(" "),
           _c(
             "v-card-actions",
