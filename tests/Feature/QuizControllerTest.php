@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\Quiz;
 use App\Models\User;
 use App\Models\Choice;
+use App\Models\CodingLanguageAndFramework;
 use Illuminate\Support\Facades\Log;
 
 class QuizControllerTest extends TestCase
@@ -37,6 +38,14 @@ class QuizControllerTest extends TestCase
             if ($i == 1) {
                 $this->quiz->update(['correct_choice_id' => $choice->id]);
             }
+        }
+
+        $coding_language_and_framework_names = ['Java', 'PHP', 'Laravel', 'JavaScript', 'Vue', 'C', 'C++', 'Python', 'Django', 'Ruby', 'Ruby on Rails'];
+
+        foreach ($coding_language_and_framework_names as $cf) {
+            CodingLanguageAndFramework::factory()->create([
+                'name' => $cf
+            ]);
         }
     }
     /**
@@ -86,7 +95,15 @@ class QuizControllerTest extends TestCase
                     'number' => '4',
                 ]
             ],
-            'correct_choice_number' => '1'
+            'correct_choice_number' => '1',
+            'tags' => [
+                [
+                    'name' => 'Vue',
+                ],
+                [
+                    'name' => 'Ruby on Rails',
+                ],
+            ]
         ]);
 
         // $response->assertStatus(202);
@@ -97,6 +114,51 @@ class QuizControllerTest extends TestCase
         ]);
         $this->assertSame(Quiz::count(), 1 + 1);
         $this->assertSame(Choice::count(), 4 + 4);
+        $vue = CodingLanguageAndFramework::where('name', 'Vue')->first();
+        $new_quiz = Quiz::where('title', 'aaa')->first();
+        $this->assertSame($new_quiz->tags()->where('coding_language_and_framework_id', $vue->id)->count(), 1);
+        $rr = CodingLanguageAndFramework::where('name', 'Ruby on Rails')->first();
+        $this->assertSame($new_quiz->tags()->where('coding_language_and_framework_id', $rr->id)->count(), 1);
+    }
+
+    public function testStoreWithDuplicateTagName()
+    {
+        $response = $this->actingAs($this->user)->json('POST', '/api/quizzes/', [
+            'quiz' => [
+                'title' => 'aaa',
+                'query' => 'bbb',
+                'explanation' => 'ccc',
+            ],
+            'choices' => [
+                [
+                    'content' => 'c1',
+                    'number' => '1',
+                ],
+                [
+                    'content' => 'c2',
+                    'number' => '2',
+                ],
+                [
+                    'content' => 'c3',
+                    'number' => '3',
+                ],
+                [
+                    'content' => 'c4',
+                    'number' => '4',
+                ]
+            ],
+            'correct_choice_number' => '1',
+            'tags' => [
+                [
+                    'name' => 'Vue',
+                ],
+                [
+                    'name' => 'Vue',
+                ],
+            ]
+        ]);
+
+        $response->assertStatus(400);
     }
 
     public function testUpdateWithWrongUser()
