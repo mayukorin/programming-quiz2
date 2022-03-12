@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\StockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'auth'
-], function() {
+], function () {
     Route::post('login', [AuthController::class, 'login']);
 });
 
@@ -31,12 +32,13 @@ Route::resource('users', UserController::class);
 
 Route::resource('quizzes', QuizController::class);
 
+Route::resource('stocks', StockController::class);
+
 Route::group([
     'prefix' => 'auth',
     'middleware' => 'auth:api'
-], function() {
+], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
 });
-

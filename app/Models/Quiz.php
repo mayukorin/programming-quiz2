@@ -13,6 +13,7 @@ class Quiz extends Model
 
     protected $fillable = ['title', 'query', 'explanation', 'correct_choice_id'];
 
+    protected $hidden = array('user_id');
 
     public static $rules = array(
         'title' => 'required',
