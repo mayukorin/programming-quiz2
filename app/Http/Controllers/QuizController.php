@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Quiz;
+use App\Models\Stock;
 use App\Models\Choice;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,19 +24,32 @@ class QuizController extends Controller
 
     public function index()
     {
-        $quizzes = Quiz::all();
+        $loginUserId = auth()->check() ? auth()->user()->id : 0;
+        $loginUserStocks = Stock::select(['quiz_id as store_flag'])->where('user_id', $loginUserId);
+        $quizzes = Quiz::leftJoinSub($loginUserStocks, 'login_user_stocks', function ($join) {
+            $join->on('quizzes.id', '=', 'login_user_stocks.store_flag');
+        })->get();
+        # $quizzes = Quiz::all();
         return response()->json($quizzes, 200);
     }
 
     public function show($id)
     {
-        $quiz = Quiz::with(['user', 'correct_choice', 'choices'])->findOrFail($id);
+        $loginUserId = auth()->check() ? auth()->user()->id : 0;
+        $loginUserStocks = Stock::select(['quiz_id as store_flag'])->where('user_id', $loginUserId);
+        $quiz = Quiz::with(['user', 'correct_choice', 'choices'])->leftJoinSub($loginUserStocks, 'login_user_stocks', function ($join) {
+            $join->on('quizzes.id', '=', 'login_user_stocks.store_flag');
+        })->findOrFail($id);
         return response()->json($quiz, 200);
     }
 
     public function store(StoreQuiz $request)
     {
+        foreach (auth()->user()->stockQuizzes as $stockQuiz) {
+            Log::debug("ok");
+        }
         $quiz = auth()->user()->quizzes()->create($request->quiz);
+        # create_many
         foreach ($request->choices as $choice) {
             $new_choice = $quiz->choices()->create($choice);
             if ($new_choice->number == intval($request->correct_choice_number)) {
