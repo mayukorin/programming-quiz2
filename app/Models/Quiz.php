@@ -11,6 +11,8 @@ class Quiz extends Model
 
     protected $guarded = array('id');
 
+    protected $fillable = ['title', 'query', 'explanation', 'correct_choice_id'];
+
 
     public static $rules = array(
         'title' => 'required',

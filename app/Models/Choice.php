@@ -13,6 +13,8 @@ class Choice extends Model
 
     protected $hidden = array('id', 'quiz_id', 'created_at', 'updated_at');
 
+    protected $fillable = ['quiz_id', 'content', 'number'];
+
     public static $rules = array(
         'quiz_id' => 'required',
         'content' => 'required',
