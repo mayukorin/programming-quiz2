@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreQuiz;
+use App\Models\CodingLanguageAndFramework;
 
 class QuizController extends Controller
 {
@@ -40,6 +41,11 @@ class QuizController extends Controller
             if ($new_choice->number == intval($request->correct_choice_number)) {
                 $quiz->update(['correct_choice_id' => $new_choice->id]);
             }
+        }
+        foreach ($request->tags as $tag) {
+            $coding_languate_and_framework = CodingLanguageAndFramework::where('name', $tag['name'])->firstOrFail();
+            $new_tag = $coding_languate_and_framework->tags()->create();
+            $new_tag->update(['quiz_id' => $quiz->id]);
         }
         return response()->json($quiz, 202);
     }

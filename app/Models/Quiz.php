@@ -32,4 +32,9 @@ class Quiz extends Model
     {
         return $this->hasMany('App\Models\Choice');
     }
+
+    public function tags()
+    {
+        return $this->hasMany('App\Models\Tag');
+    }
 }
