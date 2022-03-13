@@ -9,17 +9,9 @@ class Quiz extends Model
 {
     use HasFactory;
 
-    protected $guarded = array('id');
-
     protected $fillable = ['title', 'query', 'explanation', 'correct_choice_id'];
 
-    protected $hidden = array('user_id');
-
-    public static $rules = array(
-        'title' => 'required',
-        'query' => 'required',
-        'explanation' => 'required'
-    );
+    protected $hidden = ['user_id'];
 
     public function user()
     {
