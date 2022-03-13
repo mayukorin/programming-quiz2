@@ -238,7 +238,8 @@ export default {
                         this.$emit('create-quiz', {
                             quiz: this.quiz,
                             choices: this.choices,
-                            correct_choice_number: correctChoiceNumber
+                            correct_choice_number: correctChoiceNumber,
+                            tags: this.tags,
                         });
                     });
                 }
