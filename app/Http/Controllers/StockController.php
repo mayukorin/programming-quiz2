@@ -15,4 +15,11 @@ class StockController extends Controller
         $stock = Stock::create($request->all());
         return response()->json($stock, 202);
     }
+
+    public function destroy(Stock $stock)
+    {
+        $this->authorize('destroy', $stock);
+        $stock->delete();
+        return response()->json(null, 204);
+    }
 }
