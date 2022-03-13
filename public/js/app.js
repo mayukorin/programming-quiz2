@@ -2183,6 +2183,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Quiz",
   props: {
@@ -2208,6 +2210,11 @@ __webpack_require__.r(__webpack_exports__);
         case 'xl':
           return '180';
       }
+    }
+  },
+  computed: {
+    isLoggedIn: function isLoggedIn() {
+      return this.$store.state.auth.isLoggedIn;
     }
   }
 });
@@ -2469,7 +2476,8 @@ __webpack_require__.r(__webpack_exports__);
             _this.$emit('create-quiz', {
               quiz: _this.quiz,
               choices: _this.choices,
-              correct_choice_number: correctChoiceNumber
+              correct_choice_number: correctChoiceNumber,
+              tags: _this.tags
             });
           });
         }
@@ -3218,6 +3226,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizList",
@@ -3242,6 +3252,26 @@ __webpack_require__.r(__webpack_exports__);
       get: function get() {
         return this.$store.getters["quiz/getQuizList"];
       }
+    }
+  },
+  methods: {
+    createStock: function createStock(quizId) {
+      var _this2 = this;
+
+      return this.$store.dispatch("stock/createStock", quizId).then(function () {
+        _this2.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: ["クイズをストックしました"]
+        });
+      });
+    },
+    destroyStock: function destroyStock(stockId) {
+      var _this3 = this;
+
+      return this.$store.dispatch("stock/destroyStock", stockId).then(function () {
+        _this3.$store.dispatch("flashMessage/setSuccessMessage", {
+          messages: ["クイズをストックから外しました"]
+        });
+      });
     }
   }
 });
@@ -3933,6 +3963,7 @@ var authModule = {
       state.name = payload.user.name;
       state.email = payload.user.email;
       state.isLoggedIn = true;
+      console.log(state.isLoggedIn);
     },
     reset: function reset(state) {
       state.username = "";
@@ -4117,11 +4148,44 @@ var quizModule = {
     }
   }
 };
+var stockModule = {
+  namespaced: true,
+  actions: {
+    createStock: function createStock(context, payload) {
+      console.log("stock");
+      console.log(payload);
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "post",
+        url: "stocks",
+        data: payload
+      }).then(function (response) {
+        console.log(response.data);
+        context.dispatch("quiz/fetchQuizList", null, {
+          root: true
+        }); // return response;
+      });
+    },
+    destroyStock: function destroyStock(context, payload) {
+      console.log("stock destroy");
+      console.log(payload);
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "delete",
+        url: "stocks/" + payload.stockId
+      }).then(function (response) {
+        console.log(response.data);
+        context.dispatch("quiz/fetchQuizList", null, {
+          root: true
+        }); // return response;
+      });
+    }
+  }
+};
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   modules: {
     auth: authModule,
     flashMessage: flashMessageModule,
-    quiz: quizModule
+    quiz: quizModule,
+    stock: stockModule
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
@@ -9737,22 +9801,61 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("v-card", { staticClass: "mb-1", attrs: { flat: "" } }, [
-    _c("div", { staticClass: "d-flex flex-no-wrap justify-start" }, [
-      _c(
-        "div",
-        [
-          _c(
-            "router-link",
-            {
-              attrs: { to: { name: "QuizShow", params: { id: _vm.quiz.id } } },
-            },
-            [_c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))])],
-            1
-          ),
-        ],
-        1
-      ),
-    ]),
+    _c(
+      "div",
+      { staticClass: "d-flex flex-no-wrap justify-space-between" },
+      [
+        _c(
+          "div",
+          [
+            _c(
+              "router-link",
+              {
+                attrs: {
+                  to: { name: "QuizShow", params: { id: _vm.quiz.id } },
+                },
+              },
+              [_c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))])],
+              1
+            ),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm.isLoggedIn && _vm.quiz.stock_id == null
+          ? _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                on: {
+                  click: function ($event) {
+                    return _vm.$emit("click-stock-create-button", {
+                      quiz_id: _vm.quiz.id,
+                    })
+                  },
+                },
+              },
+              [_vm._v("mdi-star-outline")]
+            )
+          : _vm.isLoggedIn && _vm.quiz.stock_id != null
+          ? _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                on: {
+                  click: function ($event) {
+                    return _vm.$emit("click-stock-destroy-button", {
+                      stockId: _vm.quiz.stock_id,
+                    })
+                  },
+                },
+              },
+              [_vm._v("mdi-star")]
+            )
+          : _vm._e(),
+      ],
+      1
+    ),
   ])
 }
 var staticRenderFns = []
@@ -11007,7 +11110,15 @@ var render = function () {
           return _c(
             "v-col",
             { key: quiz.id, attrs: { cols: "12" } },
-            [_c("Quiz", { attrs: { quiz: quiz } })],
+            [
+              _c("Quiz", {
+                attrs: { quiz: quiz },
+                on: {
+                  "click-stock-create-button": _vm.createStock,
+                  "click-stock-destroy-button": _vm.destroyStock,
+                },
+              }),
+            ],
             1
           )
         }),
