@@ -16,6 +16,7 @@ const authModule = {
       state.name = payload.user.name;
       state.email = payload.user.email;
       state.isLoggedIn = true;
+      console.log(state.isLoggedIn);
     },
     reset(state) {
       state.username = "";
@@ -193,12 +194,44 @@ const quizModule = {
   }
 };
 
+const stockModule = {
+  namespaced: true,
+  actions: {
+    createStock(context, payload) {
+      console.log("stock");
+      console.log(payload);
+      return api({
+        method: "post",
+        url: "stocks",
+        data: payload
+      }).then((response) => {
+        console.log(response.data);
+        context.dispatch("quiz/fetchQuizList", null, { root: true });
+        // return response;
+      });
+    },
+    destroyStock(context, payload) {
+      console.log("stock destroy");
+      console.log(payload);
+      return api({
+        method: "delete",
+        url: "stocks/"+payload.stockId,
+      }).then((response) => {
+        console.log(response.data);
+        context.dispatch("quiz/fetchQuizList", null, { root: true });
+        // return response;
+      });
+    }
+  }
+};
+
 
 const store = new Vuex.Store({
   modules: {
     auth: authModule,
     flashMessage: flashMessageModule,
     quiz: quizModule,
+    stock: stockModule,
   },
 });
 
