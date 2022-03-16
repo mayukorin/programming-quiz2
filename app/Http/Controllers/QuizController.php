@@ -45,9 +45,7 @@ class QuizController extends Controller
 
     public function store(StoreQuiz $request)
     {
-        foreach (auth()->user()->stockQuizzes as $stockQuiz) {
-            Log::debug("ok");
-        }
+
         $quiz = auth()->user()->quizzes()->create($request->quiz);
         # create_many
         foreach ($request->choices as $choice) {
