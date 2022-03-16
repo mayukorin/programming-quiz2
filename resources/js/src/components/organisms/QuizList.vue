@@ -19,6 +19,11 @@ export default {
     components: {
         Quiz
     },
+    props: {
+        actionName: {
+            type: String,
+        }
+    },
     data() {
       return  {
             showFlag: false,
@@ -26,7 +31,7 @@ export default {
     },
     created: function() {
         this.showFlag = false;
-        this.$store.dispatch("quiz/fetchQuizList")
+        this.$store.dispatch(this.actionName)
         .then(() => {
             this.showFlag = true;
         })

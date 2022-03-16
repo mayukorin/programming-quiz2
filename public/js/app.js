@@ -3234,6 +3234,11 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Quiz: _molecules_Quiz__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  props: {
+    actionName: {
+      type: String
+    }
+  },
   data: function data() {
     return {
       showFlag: false
@@ -3243,7 +3248,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.showFlag = false;
-    this.$store.dispatch("quiz/fetchQuizList").then(function () {
+    this.$store.dispatch(this.actionName).then(function () {
       _this.showFlag = true;
     });
   },
@@ -3647,6 +3652,33 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/src/components/templates/StockedQuizIndexView.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/src/components/templates/StockedQuizIndexView.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _organisms_QuizList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../organisms/QuizList */ "./resources/js/src/components/organisms/QuizList.vue");
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "StockedQuizIndexView",
+  components: {
+    QuizList: _organisms_QuizList__WEBPACK_IMPORTED_MODULE_0__["default"]
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -3756,8 +3788,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_templates_HomeView_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/templates/HomeView.vue */ "./resources/js/src/components/templates/HomeView.vue");
 /* harmony import */ var _components_templates_SignInView_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/templates/SignInView.vue */ "./resources/js/src/components/templates/SignInView.vue");
 /* harmony import */ var _components_templates_SignUpView_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/templates/SignUpView.vue */ "./resources/js/src/components/templates/SignUpView.vue");
@@ -3765,6 +3797,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_templates_NotFoundView_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/templates/NotFoundView.vue */ "./resources/js/src/components/templates/NotFoundView.vue");
 /* harmony import */ var _components_templates_QuizCreateView_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/templates/QuizCreateView.vue */ "./resources/js/src/components/templates/QuizCreateView.vue");
 /* harmony import */ var _components_templates_QuizUpdateView_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/templates/QuizUpdateView.vue */ "./resources/js/src/components/templates/QuizUpdateView.vue");
+/* harmony import */ var _components_templates_StockedQuizIndexView_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/templates/StockedQuizIndexView.vue */ "./resources/js/src/components/templates/StockedQuizIndexView.vue");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
@@ -3775,11 +3808,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_8__["default"]);
+
+vue__WEBPACK_IMPORTED_MODULE_8__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_9__["default"]);
 var routes = [{
   path: "/",
   name: "Home",
   component: _components_templates_HomeView_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+}, {
+  path: "/stocked-quizzes",
+  name: "StockedQuizIndex",
+  component: _components_templates_StockedQuizIndexView_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: "/sign-in",
   name: "SignIn",
@@ -3811,7 +3852,7 @@ var routes = [{
   name: "NotFound",
   component: _components_templates_NotFoundView_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_8__["default"]({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_9__["default"]({
   mode: "history",
   base: process.env.BASE_URL,
   routes: routes
