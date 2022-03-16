@@ -35,7 +35,7 @@ Route::resource('quizzes', QuizController::class);
 
 Route::resource('stocks', StockController::class);
 
-Route::get('/stocked-quizzes', IndexStockedQuizzes::class);
+Route::middleware('auth:api')->get('/stocked-quizzes', IndexStockedQuizzes::class);
 
 Route::group([
     'prefix' => 'auth',
