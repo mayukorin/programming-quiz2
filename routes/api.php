@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\IndexStockedQuizzes;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,8 @@ Route::resource('users', UserController::class);
 Route::resource('quizzes', QuizController::class);
 
 Route::resource('stocks', StockController::class);
+
+Route::get('/stocked-quizzes', IndexStockedQuizzes::class);
 
 Route::group([
     'prefix' => 'auth',

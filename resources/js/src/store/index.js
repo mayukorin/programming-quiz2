@@ -163,6 +163,15 @@ const quizModule = {
         context.commit("setQuizList", { quizList: response.data });
       })
     },
+    fetchStockedQuizList(context) {
+      return api({
+        method: "get",
+        url: "stocked-quizzes",
+      }).then((response) => {
+        console.log(response.data);
+        context.commit("setQuizList", { quizList: response.data });
+      })
+    },
     createQuiz(context, payload) {
       return api({
         method: "post",
@@ -173,8 +182,6 @@ const quizModule = {
       })
     },
     updateQuiz(context, payload) {
-      console.log("これからupdate");
-      console.log(payload.editQuiz);
       return api({
         method: "patch",
         url: "quizzes/"+payload.id,

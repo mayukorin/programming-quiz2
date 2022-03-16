@@ -8,6 +8,7 @@ import QuizShow from "../components/templates/QuizShowView.vue";
 import NotFound from "../components/templates/NotFoundView.vue";
 import QuizCreate from "../components/templates/QuizCreateView.vue";
 import QuizUpdate from "../components/templates/QuizUpdateView.vue";
+import StockedQuizIndex from "../components/templates/StockedQuizIndexView.vue";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,12 @@ const routes = [
       path: "/",
       name: "Home",
       component: Home,
+    },
+    {
+      path: "/stocked-quizzes",
+      name: "StockedQuizIndex",
+      component: StockedQuizIndex,
+      meta: { requiresAuth: true }
     },
     {
       path: "/sign-in",
