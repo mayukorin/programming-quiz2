@@ -142,7 +142,20 @@
                 ref="explanation"
             ></v-textarea>
             </validation-provider>
-
+            <v-autocomplete
+                label="記事につけるタグ"
+                v-model="tags"
+                :items="items"
+                hide-no-data
+                hide-selected
+                :counter="maxSelected"
+                :counter-value="computedCounterValue"
+                :menu-props="menuProps"
+                multiple
+                chips
+                deletable-chips
+                @input="adjustOptions"
+            ></v-autocomplete>
 
             <v-row>
             <Button :loading="loadFlag" @click="handleClick()">更新</Button>
@@ -183,6 +196,11 @@ export default {
                 "選択肢3",
                 "選択肢4",
             ],
+            tags: [],
+            items: [ "Vue", "JavaScript", "Java"],
+            menuProps: {
+                disabled: false
+            },
         }
     },
     methods: {
@@ -204,6 +222,27 @@ export default {
                     });
                 }
             });
+        },
+        adjustOptions: function(selectedIds) {
+            if (this.computedCounterValue >= this.maxSelected) {
+                this.menuProps.disabled = true
+            } else {
+                this.menuProps.disabled = false
+            }
+        }
+    },
+    computed: {
+        computedCounterValue () {
+            let totalCount = 0
+            if (this.tags && this.tags.length > 0) {
+                const selectedItems = this.tags.map((name) => {
+                return this.items.find((element) => element == name)
+                })
+                totalCount = selectedItems.reduce(function(prev, cur) {
+                return prev + ((cur.count)? cur.count: 1);
+                }, 0);
+            }
+            return totalCount
         }
     },
     watch: {
@@ -213,6 +252,10 @@ export default {
             this.quiz.query = originQuiz.query;
             this.choices = originQuiz.choices;
             this.correctChoice = "選択肢" +  originQuiz.correct_choice.number;
+            for (let coding_language_and_framework of originQuiz.coding_language_and_frameworks) {
+                console.log("co");
+                this.tags.push(coding_language_and_framework.name);
+            }
         }
     }
 };

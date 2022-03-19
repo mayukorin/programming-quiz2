@@ -142,7 +142,7 @@
                 ref="explanation"
             ></v-textarea>
             </validation-provider>
-            
+            <!--
             <div class="tag-caption">記事につけるタグ</div>
             <div v-for="(tagName, index) in tags" :key="index">
                 <validation-provider
@@ -181,6 +181,21 @@
                 </validation-provider>
             </div>
             <Button @click="addTag()" v-if="!isTagMax">タグ追加</Button>
+            -->
+            <v-autocomplete
+                label="記事につけるタグ"
+                v-model="tags"
+                :items="items"
+                hide-no-data
+                hide-selected
+                :counter="maxSelected"
+                :counter-value="computedCounterValue"
+                :menu-props="menuProps"
+                multiple
+                chips
+                deletable-chips
+                @input="adjustOptions"
+            ></v-autocomplete>
             <v-row>
                 <Button :loading="loadFlag" @click="handleClick()">作成</Button>
             </v-row>
@@ -204,6 +219,7 @@ export default {
     },
     data() {
       return {
+            maxSelected: 2,
             quiz: {
                 explanation: "",
                 title: "",
@@ -222,8 +238,11 @@ export default {
                 "選択肢3",
                 "選択肢4",
             ],
-            tags: [""],
-            items: ["Vue", "javascript", "Java"]
+            tags: [],
+            items: [ "Vue", "JavaScript", "Java"],
+            menuProps: {
+                disabled: false
+            },
         }
     },
     methods: {
@@ -232,29 +251,42 @@ export default {
                 if (result) {
                     this.$nextTick()
                     .then(() => {
-                        console.log(this.correctChoice);
+                        console.log(this.tags);
                         let correctChoiceNumber = this.correctChoice.slice(-1);
-                        console.log(correctChoiceNumber);
+                        let tagsWithNameKey = this.tags.map(function( tagName ) {
+                            return {"name": tagName};
+                        });
+                        console.log(tagsWithNameKey);
                         this.$emit('create-quiz', {
                             quiz: this.quiz,
                             choices: this.choices,
                             correct_choice_number: correctChoiceNumber,
-                            tags: this.tags,
+                            tags: tagsWithNameKey,
                         });
                     });
                 }
             });
         },
-        deleteTag: function(index) {
-            this.tags.splice(index, 1);
-        },
-        addTag: function() {
-            this.tags.push('');
+        adjustOptions: function(selectedIds) {
+            if (this.computedCounterValue >= this.maxSelected) {
+                this.menuProps.disabled = true
+            } else {
+                this.menuProps.disabled = false
+            }
         }
     },
     computed: {
-        isTagMax() {
-            return (this.tags.length >= 5);
+        computedCounterValue () {
+            let totalCount = 0
+            if (this.tags && this.tags.length > 0) {
+                const selectedItems = this.tags.map((name) => {
+                return this.items.find((element) => element == name)
+                })
+                totalCount = selectedItems.reduce(function(prev, cur) {
+                return prev + ((cur.count)? cur.count: 1);
+                }, 0);
+            }
+            return totalCount
         }
     }
 };

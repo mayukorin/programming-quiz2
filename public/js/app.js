@@ -2423,6 +2423,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCreateForm",
@@ -2436,6 +2451,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      maxSelected: 2,
       quiz: {
         explanation: "",
         title: "",
@@ -2456,8 +2472,11 @@ __webpack_require__.r(__webpack_exports__);
       }],
       correctChoice: "選択肢1",
       selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"],
-      tags: [""],
-      items: ["Vue", "javascript", "Java"]
+      tags: [],
+      items: ["Vue", "JavaScript", "Java"],
+      menuProps: {
+        disabled: false
+      }
     };
   },
   methods: {
@@ -2467,17 +2486,23 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.observer.validate().then(function (result) {
         if (result) {
           _this.$nextTick().then(function () {
-            console.log(_this.correctChoice);
+            console.log(_this.tags);
 
             var correctChoiceNumber = _this.correctChoice.slice(-1);
 
-            console.log(correctChoiceNumber);
+            var tagsWithNameKey = _this.tags.map(function (tagName) {
+              return {
+                "name": tagName
+              };
+            });
+
+            console.log(tagsWithNameKey);
 
             _this.$emit('create-quiz', {
               quiz: _this.quiz,
               choices: _this.choices,
               correct_choice_number: correctChoiceNumber,
-              tags: _this.tags
+              tags: tagsWithNameKey
             });
           });
         }
@@ -2488,11 +2513,36 @@ __webpack_require__.r(__webpack_exports__);
     },
     addTag: function addTag() {
       this.tags.push('');
+    },
+    adjustOptions: function adjustOptions(selectedIds) {
+      if (this.computedCounterValue >= this.maxSelected) {
+        this.menuProps.disabled = true;
+      } else {
+        this.menuProps.disabled = false;
+      }
     }
   },
   computed: {
     isTagMax: function isTagMax() {
       return this.tags.length >= 5;
+    },
+    computedCounterValue: function computedCounterValue() {
+      var _this2 = this;
+
+      var totalCount = 0;
+
+      if (this.tags && this.tags.length > 0) {
+        var selectedItems = this.tags.map(function (name) {
+          return _this2.items.find(function (element) {
+            return element == name;
+          });
+        });
+        totalCount = selectedItems.reduce(function (prev, cur) {
+          return prev + (cur.count ? cur.count : 1);
+        }, 0);
+      }
+
+      return totalCount;
     }
   }
 });
@@ -2511,6 +2561,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _atoms_Button_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../atoms/Button.vue */ "./resources/js/src/components/atoms/Button.vue");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2687,7 +2756,12 @@ __webpack_require__.r(__webpack_exports__);
       },
       choices: [],
       correctChoice: "選択肢1",
-      selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"]
+      selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"],
+      tags: [],
+      items: ["Vue", "JavaScript", "Java"],
+      menuProps: {
+        disabled: false
+      }
     };
   },
   methods: {
@@ -2712,6 +2786,33 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    adjustOptions: function adjustOptions(selectedIds) {
+      if (this.computedCounterValue >= this.maxSelected) {
+        this.menuProps.disabled = true;
+      } else {
+        this.menuProps.disabled = false;
+      }
+    }
+  },
+  computed: {
+    computedCounterValue: function computedCounterValue() {
+      var _this2 = this;
+
+      var totalCount = 0;
+
+      if (this.tags && this.tags.length > 0) {
+        var selectedItems = this.tags.map(function (name) {
+          return _this2.items.find(function (element) {
+            return element == name;
+          });
+        });
+        totalCount = selectedItems.reduce(function (prev, cur) {
+          return prev + (cur.count ? cur.count : 1);
+        }, 0);
+      }
+
+      return totalCount;
     }
   },
   watch: {
@@ -2721,6 +2822,21 @@ __webpack_require__.r(__webpack_exports__);
       this.quiz.query = _originQuiz.query;
       this.choices = _originQuiz.choices;
       this.correctChoice = "選択肢" + _originQuiz.correct_choice.number;
+
+      var _iterator = _createForOfIteratorHelper(_originQuiz.coding_language_and_frameworks),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var coding_language_and_framework = _step.value;
+          console.log("co");
+          this.tags.push(coding_language_and_framework.name);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
     }
   }
 });
@@ -10179,108 +10295,28 @@ var render = function () {
               ]),
             }),
             _vm._v(" "),
-            _c("div", { staticClass: "tag-caption" }, [
-              _vm._v("記事につけるタグ"),
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.tags, function (tagName, index) {
-              return _c(
-                "div",
-                { key: index },
-                [
-                  _c("validation-provider", {
-                    ref: "tagProvider",
-                    refInFor: true,
-                    attrs: { name: "タグ", rules: "required", id: "tag" },
-                    scopedSlots: _vm._u(
-                      [
-                        {
-                          key: "default",
-                          fn: function (ref) {
-                            var errors = ref.errors
-                            return [
-                              _c(
-                                "v-container",
-                                { staticClass: "px-0", attrs: { fluid: "" } },
-                                [
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "10" } },
-                                        [
-                                          _c("v-autocomplete", {
-                                            ref: "tag",
-                                            refInFor: true,
-                                            attrs: {
-                                              items: _vm.items,
-                                              "error-messages": errors,
-                                              label: "タグ",
-                                              required: "",
-                                            },
-                                            model: {
-                                              value: _vm.tags[index],
-                                              callback: function ($$v) {
-                                                _vm.$set(_vm.tags, index, $$v)
-                                              },
-                                              expression: "tags[index]",
-                                            },
-                                          }),
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "2", md: "2" } },
-                                        [
-                                          _c(
-                                            "Button",
-                                            {
-                                              on: {
-                                                click: function ($event) {
-                                                  return _vm.deleteTag(index)
-                                                },
-                                              },
-                                            },
-                                            [_vm._v("削除")]
-                                          ),
-                                        ],
-                                        1
-                                      ),
-                                    ],
-                                    1
-                                  ),
-                                ],
-                                1
-                              ),
-                            ]
-                          },
-                        },
-                      ],
-                      null,
-                      true
-                    ),
-                  }),
-                ],
-                1
-              )
+            _c("v-autocomplete", {
+              attrs: {
+                label: "記事につけるタグ",
+                items: _vm.items,
+                "hide-no-data": "",
+                "hide-selected": "",
+                counter: _vm.maxSelected,
+                "counter-value": _vm.computedCounterValue,
+                "menu-props": _vm.menuProps,
+                multiple: "",
+                chips: "",
+                "deletable-chips": "",
+              },
+              on: { input: _vm.adjustOptions },
+              model: {
+                value: _vm.tags,
+                callback: function ($$v) {
+                  _vm.tags = $$v
+                },
+                expression: "tags",
+              },
             }),
-            _vm._v(" "),
-            !_vm.isTagMax
-              ? _c(
-                  "Button",
-                  {
-                    on: {
-                      click: function ($event) {
-                        return _vm.addTag()
-                      },
-                    },
-                  },
-                  [_vm._v("タグ追加")]
-                )
-              : _vm._e(),
             _vm._v(" "),
             _c(
               "v-row",
@@ -10505,6 +10541,29 @@ var render = function () {
                   },
                 },
               ]),
+            }),
+            _vm._v(" "),
+            _c("v-autocomplete", {
+              attrs: {
+                label: "記事につけるタグ",
+                items: _vm.items,
+                "hide-no-data": "",
+                "hide-selected": "",
+                counter: _vm.maxSelected,
+                "counter-value": _vm.computedCounterValue,
+                "menu-props": _vm.menuProps,
+                multiple: "",
+                chips: "",
+                "deletable-chips": "",
+              },
+              on: { input: _vm.adjustOptions },
+              model: {
+                value: _vm.tags,
+                callback: function ($$v) {
+                  _vm.tags = $$v
+                },
+                expression: "tags",
+              },
             }),
             _vm._v(" "),
             _c(
