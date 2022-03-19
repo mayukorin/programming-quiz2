@@ -253,7 +253,6 @@ export default {
             this.choices = originQuiz.choices;
             this.correctChoice = "選択肢" +  originQuiz.correct_choice.number;
             for (let coding_language_and_framework of originQuiz.coding_language_and_frameworks) {
-                console.log("co");
                 this.tags.push(coding_language_and_framework.name);
             }
         }

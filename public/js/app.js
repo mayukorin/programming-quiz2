@@ -2185,6 +2185,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Quiz",
   props: {
@@ -2508,12 +2516,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    deleteTag: function deleteTag(index) {
-      this.tags.splice(index, 1);
-    },
-    addTag: function addTag() {
-      this.tags.push('');
-    },
     adjustOptions: function adjustOptions(selectedIds) {
       if (this.computedCounterValue >= this.maxSelected) {
         this.menuProps.disabled = true;
@@ -2523,9 +2525,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
-    isTagMax: function isTagMax() {
-      return this.tags.length >= 5;
-    },
     computedCounterValue: function computedCounterValue() {
       var _this2 = this;
 
@@ -2829,7 +2828,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var coding_language_and_framework = _step.value;
-          console.log("co");
           this.tags.push(coding_language_and_framework.name);
         }
       } catch (err) {
@@ -10056,6 +10054,37 @@ var render = function () {
               [_c("v-card-title", [_vm._v(_vm._s(_vm.quiz.title))])],
               1
             ),
+            _vm._v(" "),
+            _vm.quiz.coding_language_and_frameworks.length != 0
+              ? _c("v-card-text", [
+                  _c(
+                    "span",
+                    [
+                      _c("v-icon", { staticClass: "mr-1" }, [
+                        _vm._v("mdi-tag"),
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(
+                        _vm.quiz.coding_language_and_frameworks,
+                        function (clf) {
+                          return _c(
+                            "span",
+                            { key: clf.name, staticClass: "mr-1" },
+                            [
+                              _vm._v(
+                                "\n                    " +
+                                  _vm._s(clf.name) +
+                                  "\n                "
+                              ),
+                            ]
+                          )
+                        }
+                      ),
+                    ],
+                    2
+                  ),
+                ])
+              : _vm._e(),
           ],
           1
         ),
@@ -11084,11 +11113,11 @@ var render = function () {
               [
                 _c("v-icon", { staticClass: "mr-1" }, [_vm._v("mdi-tag")]),
                 _vm._v(" "),
-                _vm._l(_vm.tags, function (tag) {
-                  return _c("span", { key: tag.name, staticClass: "mr-1" }, [
+                _vm._l(_vm.quiz.coding_language_and_frameworks, function (clf) {
+                  return _c("span", { key: clf.name, staticClass: "mr-1" }, [
                     _vm._v(
                       "\n                    " +
-                        _vm._s(tag.name) +
+                        _vm._s(clf.name) +
                         "\n                "
                     ),
                   ])

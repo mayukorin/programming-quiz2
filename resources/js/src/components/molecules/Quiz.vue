@@ -14,6 +14,14 @@
                 <router-link :to="{name: 'QuizShow', params: { id: quiz.id }}">
                   <v-card-title>{{ quiz.title }}</v-card-title>
                 </router-link>
+                <v-card-text v-if="quiz.coding_language_and_frameworks.length != 0">
+                  <span>
+                    <v-icon class="mr-1">mdi-tag</v-icon>
+                    <span class="mr-1" v-for="clf in quiz.coding_language_and_frameworks" :key="clf.name">
+                        {{ clf.name }}
+                    </span>
+                  </span>
+                </v-card-text>
             </div> 
             <v-icon v-if="isLoggedIn && quiz.stock_id == null" class="mr-2" @click="$emit('click-stock-create-button', {quiz_id: quiz.id})">mdi-star-outline</v-icon>
             <v-icon v-else-if="isLoggedIn && quiz.stock_id != null" class="mr-2" @click="$emit('click-stock-destroy-button', { stockId: quiz.stock_id })">mdi-star</v-icon>

@@ -10,8 +10,8 @@
             <v-card-text>
                 <span>
                     <v-icon class="mr-1">mdi-tag</v-icon>
-                    <span class="mr-1" v-for="tag in tags" :key="tag.name">
-                        {{ tag.name }}
+                    <span class="mr-1" v-for="clf in quiz.coding_language_and_frameworks" :key="clf.name">
+                        {{ clf.name }}
                     </span>
                 </span>
             </v-card-text>
