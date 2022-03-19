@@ -25,21 +25,16 @@ class QuizController extends Controller
     public function index()
     {
         $loginUserId = auth()->check() ? auth()->user()->id : 0;
-        $loginUserStocks = Stock::select('quiz_id as stock_flag', 'id as stock_id')->where('user_id', $loginUserId);
-        $quizzes = Quiz::leftJoinSub($loginUserStocks, 'login_user_stocks', function ($join) {
-            $join->on('quizzes.id', '=', 'login_user_stocks.stock_flag');
-        })->get();
-        # $quizzes = Quiz::all();
+        $loginUserStocks = Stock::SelectStocksOfLoginUser($loginUserId);
+        $quizzes = Quiz::withStocks($loginUserStocks)->get();
         return response()->json($quizzes, 200);
     }
 
     public function show($id)
     {
         $loginUserId = auth()->check() ? auth()->user()->id : 0;
-        $loginUserStocks = Stock::select('quiz_id as stock_flag', 'id as stock_id')->where('user_id', $loginUserId);
-        $quiz = Quiz::with(['user', 'correct_choice', 'choices'])->leftJoinSub($loginUserStocks, 'login_user_stocks', function ($join) {
-            $join->on('quizzes.id', '=', 'login_user_stocks.stock_flag');
-        })->findOrFail($id);
+        $loginUserStocks = Stock::SelectStocksOfLoginUser($loginUserId);
+        $quiz = Quiz::withStocks($loginUserStocks)->findOrFail($id);
         return response()->json($quiz, 200);
     }
 
