@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;  
-use Illuminate\Http\Exceptions\HttpResponseException; 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreQuiz extends FormRequest
 {
@@ -33,16 +32,18 @@ class StoreQuiz extends FormRequest
             'choices.*.content' => 'required',
             'choices.*.number' => 'required|integer|between:1, 4|distinct',
             'correct_choice_number' => 'required|integer|between:1, 4',
+            'tags.*.name' => 'required|distinct',
+            'tags' => 'max:5',
         ];
     }
 
-    protected function failedValidation( Validator $validator )
+    protected function failedValidation(Validator $validator)
     {
-        
+
         $response['message']  = $validator->errors()->all();
 
         throw new HttpResponseException(
-            response()->json( $response, 400 )
+            response()->json($response, 400)
         );
     }
 }

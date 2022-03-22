@@ -1,6 +1,6 @@
 <template>
     <v-card flat class="mb-1">
-        <div class="d-flex flex-no-wrap justify-start">
+        <div class="d-flex flex-no-wrap justify-space-between">
           <!--
             <v-avatar
                 class="ma-3"
@@ -14,7 +14,9 @@
                 <router-link :to="{name: 'QuizShow', params: { id: quiz.id }}">
                   <v-card-title>{{ quiz.title }}</v-card-title>
                 </router-link>
-            </div>
+            </div> 
+            <v-icon v-if="isLoggedIn && quiz.stock_id == null" class="mr-2" @click="$emit('click-stock-create-button', {quiz_id: quiz.id})">mdi-star-outline</v-icon>
+            <v-icon v-else-if="isLoggedIn && quiz.stock_id != null" class="mr-2" @click="$emit('click-stock-destroy-button', { stockId: quiz.stock_id })">mdi-star</v-icon>
         </div>
     </v-card>
 </template>
@@ -36,9 +38,12 @@ export default {
             case 'xl': return '180'
         }
     }
-  }
-
-  
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.auth.isLoggedIn;
+    },
+  },
 };
 </script>
 <style scoped>

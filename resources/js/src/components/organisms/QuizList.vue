@@ -4,6 +4,8 @@
             <v-col cols="12" v-for="quiz in quizList" :key="quiz.id">
                 <Quiz
                     :quiz="quiz" 
+                    @click-stock-create-button="createStock"
+                    @click-stock-destroy-button="destroyStock"
                 />
             </v-col>
         </v-row>
@@ -17,6 +19,11 @@ export default {
     components: {
         Quiz
     },
+    props: {
+        actionName: {
+            type: String,
+        }
+    },
     data() {
       return  {
             showFlag: false,
@@ -24,7 +31,7 @@ export default {
     },
     created: function() {
         this.showFlag = false;
-        this.$store.dispatch("quiz/fetchQuizList")
+        this.$store.dispatch(this.actionName)
         .then(() => {
             this.showFlag = true;
         })
@@ -34,6 +41,24 @@ export default {
             get(){
                 return this.$store.getters["quiz/getQuizList"];
             }
+        }
+    },
+    methods: {
+        createStock: function(quizId) {
+            return this.$store.dispatch("stock/createStock", quizId)
+            .then(() => {
+                this.$store.dispatch("flashMessage/setSuccessMessage", {
+                    messages: ["クイズをストックしました"],
+                });
+            })
+        },
+        destroyStock: function(stockId) {
+            return this.$store.dispatch("stock/destroyStock", stockId)
+            .then(() => {
+                this.$store.dispatch("flashMessage/setSuccessMessage", {
+                    messages: ["クイズをストックから外しました"],
+                });
+            })
         }
     }
 };

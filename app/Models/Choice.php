@@ -9,15 +9,9 @@ class Choice extends Model
 {
     use HasFactory;
 
-    protected $guarded = array('id');
+    protected $hidden = ['id', 'quiz_id', 'created_at', 'updated_at'];
 
-    protected $hidden = array('id', 'quiz_id', 'created_at', 'updated_at');
-
-    public static $rules = array(
-        'quiz_id' => 'required',
-        'content' => 'required',
-        'number' => 'required',
-    );
+    protected $fillable = ['quiz_id', 'content', 'number'];
 
     public function quiz()
     {

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <QuizList :action-name="'quiz/fetchQuizList'" />
+        <QuizList :action-name="'quiz/fetchStockedQuizList'" />
     </div>
 </template>
 <script>
 import QuizList from "../organisms/QuizList";
 
 export default {
-    name: "Home",
+    name: "StockedQuizIndexView",
     components: {
         QuizList,
     },
