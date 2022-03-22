@@ -50,8 +50,8 @@ class QuizController extends Controller
             }
         }
         foreach ($request->tags as $tag) {
-            $coding_languate_and_framework = CodingLanguageAndFramework::where('name', $tag['name'])->firstOrFail();
-            $new_tag = $coding_languate_and_framework->tags()->create();
+            $coding_language_and_framework = CodingLanguageAndFramework::where('name', $tag['name'])->firstOrFail();
+            $new_tag = $coding_language_and_framework->tags()->create();
             $new_tag->update(['quiz_id' => $quiz->id]);
         }
         return response()->json($quiz, 202);
