@@ -18,4 +18,14 @@ class CodingLanguageAndFramework extends Model
     {
         return $this->hasMany('App\Models\Tag', 'coding_language_and_framework_id');
     }
+
+    public function quizzes()
+    {
+        return $this->belongsToMany(Quiz::class, 'tags');
+    }
+   
+    public function scopeWithQuizzes($builder)
+    {
+        return $builder->with(['quizzes.user', 'quizzes.correct_choice', 'quizzes.choices', 'quizzes.coding_language_and_frameworks']);
+    }
 }

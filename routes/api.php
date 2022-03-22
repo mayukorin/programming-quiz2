@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\IndexStockedQuizzes;
+use App\Http\Controllers\CodingLanguageAndFrameworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::resource('users', UserController::class);
 Route::resource('quizzes', QuizController::class);
 
 Route::resource('stocks', StockController::class);
+
+Route::resource('coding_language_and_frameworks', CodingLanguageAndFrameworkController::class);
 
 Route::middleware('auth:api')->get('/stocked-quizzes', IndexStockedQuizzes::class);
 

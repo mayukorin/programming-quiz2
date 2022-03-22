@@ -1,15 +1,15 @@
 <template>
     <div>
-        <QuizList :action-name="'quiz/fetchStockedQuizList'" />
+        <StockedQuizIndex />
     </div>
 </template>
 <script>
-import QuizList from "../organisms/QuizList";
+import StockedQuizIndex from "../organisms/StockedQuizIndex";
 
 export default {
     name: "StockedQuizIndexView",
     components: {
-        QuizList,
+        StockedQuizIndex,
     },
 };
 </script>

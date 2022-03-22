@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Home from "../components/templates/HomeView.vue";
+import HomeView from "../components/templates/HomeView.vue";
 import SignIn from "../components/templates/SignInView.vue";
 import SignUp from "../components/templates/SignUpView.vue";
 import QuizShow from "../components/templates/QuizShowView.vue";
@@ -9,6 +9,7 @@ import NotFound from "../components/templates/NotFoundView.vue";
 import QuizCreate from "../components/templates/QuizCreateView.vue";
 import QuizUpdate from "../components/templates/QuizUpdateView.vue";
 import StockedQuizIndex from "../components/templates/StockedQuizIndexView.vue";
+import TaggedQuizIndexView from "../components/templates/TaggedQuizIndexView.vue";
 
 Vue.use(VueRouter);
 
@@ -16,7 +17,7 @@ const routes = [
     {
       path: "/",
       name: "Home",
-      component: Home,
+      component: HomeView,
     },
     {
       path: "/stocked-quizzes",
@@ -50,6 +51,11 @@ const routes = [
       name: "QuizUpdate",
       component: QuizUpdate,
       meta: { requiresAuth: true }
+    },
+    {
+      path: "/coding_language_and_frameworks/:id",
+      name: "TaggedQuizIndex",
+      component: TaggedQuizIndexView,
     },
     {
       path: "*",

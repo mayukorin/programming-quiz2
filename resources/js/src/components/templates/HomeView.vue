@@ -1,15 +1,15 @@
 <template>
     <div>
-        <QuizList :action-name="'quiz/fetchQuizList'" />
+        <Home :action-name="'quiz/fetchQuizList'" />
     </div>
 </template>
 <script>
-import QuizList from "../organisms/QuizList";
+import Home from "../organisms/Home";
 
 export default {
-    name: "Home",
+    name: "HomeView",
     components: {
-        QuizList,
+        Home,
     },
 };
 </script>

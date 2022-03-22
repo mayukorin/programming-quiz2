@@ -10,8 +10,8 @@
             <v-card-text>
                 <span>
                     <v-icon class="mr-1">mdi-tag</v-icon>
-                    <span class="mr-1" v-for="clf in quiz.coding_language_and_frameworks" :key="clf.name">
-                        {{ clf.name }}
+                    <span class="mr-1" v-for="clf in quiz.coding_language_and_frameworks" :key="clf.name" @click="fetchClf(clf.id)">
+                        <router-link :to="{name: 'TaggedQuizIndex', params: { id: clf.id }}">{{ clf.name }}</router-link>
                     </span>
                 </span>
             </v-card-text>
@@ -81,6 +81,9 @@ export default {
             .finally(() => {
                 this.deleteLoadFlag = false;
             })
+        },
+        fetchClf(clfId) {
+            console.log(clfId);
         }
     },
     computed: {
