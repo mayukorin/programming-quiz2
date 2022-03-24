@@ -10561,12 +10561,20 @@ var render = function () {
                             "span",
                             { key: clf.name, staticClass: "mr-1" },
                             [
-                              _vm._v(
-                                "\n                    " +
-                                  _vm._s(clf.name) +
-                                  "\n                "
+                              _c(
+                                "router-link",
+                                {
+                                  attrs: {
+                                    to: {
+                                      name: "TaggedQuizIndex",
+                                      params: { id: clf.id },
+                                    },
+                                  },
+                                },
+                                [_vm._v(_vm._s(clf.name))]
                               ),
-                            ]
+                            ],
+                            1
                           )
                         }
                       ),
