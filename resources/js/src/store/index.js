@@ -9,19 +9,19 @@ const authModule = {
   state: {
     name: "",
     email: "",
-    isLoggedIn: false,
   },
   mutations: {
     set(state, payload) {
       state.name = payload.user.name;
       state.email = payload.user.email;
-      state.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", true);
       console.log(state.isLoggedIn);
     },
     reset(state) {
-      state.username = "";
+      state.name = "bbb";
       state.email = "";
-      state.isLoggedIn = false;
+      console.log("reset");
+      localStorage.removeItem("isLoggedIn");
     },
   },
   actions: {

@@ -49,7 +49,9 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.state.auth.isLoggedIn;
+      console.log("computed");
+      console.log(localStorage.getItem("isLoggedIn"));
+      return localStorage.getItem("isLoggedIn");
     },
   },
 };

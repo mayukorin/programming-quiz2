@@ -2222,7 +2222,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isLoggedIn: function isLoggedIn() {
-      return this.$store.state.auth.isLoggedIn;
+      console.log("computed");
+      console.log(localStorage.getItem("isLoggedIn"));
+      return localStorage.getItem("isLoggedIn");
     }
   }
 });
@@ -4272,20 +4274,20 @@ var authModule = {
   namespaced: true,
   state: {
     name: "",
-    email: "",
-    isLoggedIn: false
+    email: ""
   },
   mutations: {
     set: function set(state, payload) {
       state.name = payload.user.name;
       state.email = payload.user.email;
-      state.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", true);
       console.log(state.isLoggedIn);
     },
     reset: function reset(state) {
-      state.username = "";
+      state.name = "bbb";
       state.email = "";
-      state.isLoggedIn = false;
+      console.log("reset");
+      localStorage.removeItem("isLoggedIn");
     }
   },
   actions: {
