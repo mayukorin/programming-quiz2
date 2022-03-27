@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CodingLanguageAndFramework;
+use App\Models\Choice;
+use App\Models\Tag;
+use App\Models\User;
+
 
 class Quiz extends Model
 {
@@ -17,22 +21,22 @@ class Quiz extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function correct_choice()
     {
-        return $this->belongsTo('App\Models\Choice', 'correct_choice_id');
+        return $this->belongsTo(Choice::class, 'correct_choice_id');
     }
 
     public function choices()
     {
-        return $this->hasMany('App\Models\Choice');
+        return $this->hasMany(Choice::class);
     }
 
     public function tags()
     {
-        return $this->hasMany('App\Models\Tag');
+        return $this->hasMany(Tag::class);
     }
 
     public function coding_language_and_frameworks()
