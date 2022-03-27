@@ -47,7 +47,8 @@ class Quiz extends Model
     public function scopeWithStocks($builder, $loginUserStocks)
     {
         return $builder->with(['user', 'correct_choice', 'choices', 'coding_language_and_frameworks'])->leftJoinSub($loginUserStocks, 'login_user_stocks', function ($join) {
-            $join->on('quizzes.id', '=', 'login_user_stocks.stock_flag');
+            $join->on('quizzes.id', '=', 'login_user_stocks.quiz_id');
         });
     }
+
 }
