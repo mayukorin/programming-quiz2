@@ -44,15 +44,15 @@ class QuizController extends Controller
         $quiz = auth()->user()->quizzes()->create($request->quiz);
         # create_many
         foreach ($request->choices as $choice) {
-            $new_choice = $quiz->choices()->create($choice);
-            if ($new_choice->number == intval($request->correct_choice_number)) {
-                $quiz->update(['correct_choice_id' => $new_choice->id]);
+            $newChoice = $quiz->choices()->create($choice);
+            if ($newChoice->number == intval($request->correct_choice_number)) {
+                $quiz->update(['correct_choice_id' => $newChoice->id]);
             }
         }
         foreach ($request->tags as $tag) {
-            $coding_languate_and_framework = CodingLanguageAndFramework::where('name', $tag['name'])->firstOrFail();
-            $new_tag = $coding_languate_and_framework->tags()->create();
-            $new_tag->update(['quiz_id' => $quiz->id]);
+            $codingLanguageAndFramework = CodingLanguageAndFramework::where('name', $tag['name'])->firstOrFail();
+            $newTag = $codingLanguageAndFramework->tags()->create();
+            $newTag->update(['quiz_id' => $quiz->id]);
         }
         return response()->json($quiz, 202);
     }
@@ -64,10 +64,10 @@ class QuizController extends Controller
         $quiz->update($request->quiz);
 
         foreach ($request->choices as $choice) {
-            $edit_choice = $quiz->choices()->where('number', $choice['number'])->first();
-            $edit_choice->update($choice);
-            if ($edit_choice->number == intval($request->correct_choice_number)) {
-                $quiz->update(['correct_choice_id' => $edit_choice->id]);
+            $editChoice = $quiz->choices()->where('number', $choice['number'])->first();
+            $editChoice->update($choice);
+            if ($editChoice->number == intval($request->correct_choice_number)) {
+                $quiz->update(['correct_choice_id' => $editChoice->id]);
             }
         }
         return response()->json($quiz, 200);

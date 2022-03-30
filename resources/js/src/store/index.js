@@ -9,19 +9,19 @@ const authModule = {
   state: {
     name: "",
     email: "",
-    isLoggedIn: false,
   },
   mutations: {
     set(state, payload) {
       state.name = payload.user.name;
       state.email = payload.user.email;
-      state.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", true);
       console.log(state.isLoggedIn);
     },
     reset(state) {
-      state.username = "";
+      state.name = "bbb";
       state.email = "";
-      state.isLoggedIn = false;
+      console.log("reset");
+      localStorage.removeItem("isLoggedIn");
     },
   },
   actions: {
@@ -129,7 +129,9 @@ const quizModule = {
       state.quiz = payload.quiz;
     },
     setQuizList(state, payload) {
+      console.log("quizList");
       state.quizList = payload.quizList;
+      console.log(state.quizList);
     },
     clear(state) {
       state.quiz = null;
@@ -203,6 +205,7 @@ const quizModule = {
 
 const stockModule = {
   namespaced: true,
+  
   actions: {
     createStock(context, payload) {
       console.log("stock");
@@ -232,6 +235,38 @@ const stockModule = {
   }
 };
 
+const codingLanguageAndFrameworkModule = {
+  namespaced: true,
+  state: {
+    codingLanguageAndFramework: null,
+  },
+  mutations: {
+    setCodingLanguageAndFramework(state, payload) {
+      state.codingLanguageAndFramework = payload.codingLanguageAndFramework;
+    },
+    clear(state) {
+      state.codingLanguageAndFramework = null;
+    },
+  },
+  getters: {
+    getCodingLanguageAndFramework(state) {
+      return state.codingLanguageAndFramework;
+    },
+  },
+  actions: {
+    fetchCodingLanguageAndFramework(context, payload) {
+      return api({
+        method: "get",
+        url: "coding_language_and_frameworks/"+payload.id
+      }).then((response) => {
+        console.log(response.data);
+        context.commit("setCodingLanguageAndFramework", { codingLanguageAndFramework: response.data});
+        context.commit("quiz/setQuizList", { quizList: response.data.quizzes }, {root: true});
+      })
+    }
+  }
+}
+
 
 const store = new Vuex.Store({
   modules: {
@@ -239,6 +274,7 @@ const store = new Vuex.Store({
     flashMessage: flashMessageModule,
     quiz: quizModule,
     stock: stockModule,
+    codingLanguageAndFramework: codingLanguageAndFrameworkModule,
   },
 });
 

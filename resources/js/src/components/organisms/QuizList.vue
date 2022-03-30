@@ -22,23 +22,17 @@ export default {
     props: {
         actionName: {
             type: String,
+        },
+        showFlag: {
+            type: Boolean,
+            default: false,
         }
-    },
-    data() {
-      return  {
-            showFlag: false,
-      }
-    },
-    created: function() {
-        this.showFlag = false;
-        this.$store.dispatch(this.actionName)
-        .then(() => {
-            this.showFlag = true;
-        })
     },
     computed: {
         quizList: {
             get(){
+                console.log("computed");
+                console.log(this.$store.getters["quiz/getQuizList"]);
                 return this.$store.getters["quiz/getQuizList"];
             }
         }

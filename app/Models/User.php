@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Quiz;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -57,7 +58,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function quizzes()
     {
-        return $this->hasMany('App\Models\Quiz');
+        return $this->hasMany(Quiz::class);
     }
 
     public function stockQuizzes()

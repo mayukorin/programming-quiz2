@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Quiz;
 
 class Choice extends Model
 {
@@ -15,6 +16,6 @@ class Choice extends Model
 
     public function quiz()
     {
-        return $this->belongsTo('App\Models\Quiz');
+        return $this->belongsTo(Quiz::class);
     }
 }

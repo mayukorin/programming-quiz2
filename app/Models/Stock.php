@@ -13,6 +13,6 @@ class Stock extends Model
 
     public function scopeSelectStocksOfLoginUser($builder, $loginUserId)
     {
-        return $builder->select('quiz_id as stock_flag', 'id as stock_id')->where('user_id', $loginUserId);
+        return $builder->select('quiz_id', 'id as stock_id')->where('user_id', $loginUserId);
     }
 }
