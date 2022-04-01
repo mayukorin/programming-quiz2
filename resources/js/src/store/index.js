@@ -263,6 +263,16 @@ const codingLanguageAndFrameworkModule = {
         context.commit("setCodingLanguageAndFramework", { codingLanguageAndFramework: response.data});
         context.commit("quiz/setQuizList", { quizList: response.data.quizzes }, {root: true});
       })
+    },
+    searchCodingLanguageAndFrameworkByName(context, payload) {
+      return api({
+        method: "get",
+        url: "coding_language_and_frameworks/search-by-name/"+payload.name
+      }).then((response) => {
+        console.log("success");
+        console.log(response.data);
+        return response;
+      })
     }
   }
 }

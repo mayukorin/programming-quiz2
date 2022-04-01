@@ -6,7 +6,9 @@
         <v-card-text>
             <QuizCreateForm 
               @create-quiz="createQuiz"
+              @input-coding-language-and-framework-name="searchCodingLanguageAndFrameworkByName"
               :load-flag="loadFlag"
+              :coding-language-and-framework-entries="codingLanguageAndFrameworkEntries"
             />
         </v-card-text>
     </v-card>
@@ -22,6 +24,8 @@ export default {
   data() {
     return {
       loadFlag: false,
+      // codingLanguageAndFrameworkEntries: [{"id": 1, "name": "Java"}],
+      codingLanguageAndFrameworkEntries: [],
     }
   },
   methods: {
@@ -37,6 +41,14 @@ export default {
       .finally(() => {
         this.loadFlag = false;
       });
+    },
+    searchCodingLanguageAndFrameworkByName: function(name) {
+      this.$store.dispatch("codingLanguageAndFramework/searchCodingLanguageAndFrameworkByName", {
+        name: name
+      })
+      .then((response) => {
+        this.codingLanguageAndFrameworkEntries = response.data;
+      })
     }
   }
 

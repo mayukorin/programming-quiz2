@@ -8,6 +8,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\IndexStockedQuizzes;
 use App\Http\Controllers\CodingLanguageAndFrameworkController;
+use App\Http\Controllers\CodingLanguageAndFrameworkSearchByNameIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,8 @@ Route::resource('stocks', StockController::class);
 Route::resource('coding_language_and_frameworks', CodingLanguageAndFrameworkController::class);
 
 Route::middleware('auth:api')->get('/stocked-quizzes', IndexStockedQuizzes::class);
+
+Route::get('coding_language_and_frameworks/search-by-name/{name}', CodingLanguageAndFrameworkSearchByNameIndex::class);
 
 Route::group([
     'prefix' => 'auth',

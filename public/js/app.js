@@ -2448,6 +2448,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCreateForm",
@@ -2457,6 +2460,10 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     loadFlag: {
       type: Boolean
+    },
+    codingLanguageAndFrameworkEntries: {
+      type: Array,
+      "default": []
     }
   },
   data: function data() {
@@ -2483,10 +2490,10 @@ __webpack_require__.r(__webpack_exports__);
       correctChoice: "選択肢1",
       selectChoicesLabel: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"],
       tags: [],
-      items: ["Vue", "JavaScript", "Java"],
       menuProps: {
         disabled: false
-      }
+      },
+      search: null
     };
   },
   methods: {
@@ -2519,6 +2526,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     adjustOptions: function adjustOptions(selectedIds) {
+      console.log("select");
+
       if (this.computedCounterValue >= this.maxSelected) {
         this.menuProps.disabled = true;
       } else {
@@ -2533,9 +2542,9 @@ __webpack_require__.r(__webpack_exports__);
       var totalCount = 0;
 
       if (this.tags && this.tags.length > 0) {
-        var selectedItems = this.tags.map(function (name) {
-          return _this2.items.find(function (element) {
-            return element == name;
+        var selectedItems = this.tags.map(function (id) {
+          return _this2.codingLanguageAndFrameworkEntries.find(function (element) {
+            return element.id == id;
           });
         });
         totalCount = selectedItems.reduce(function (prev, cur) {
@@ -2544,6 +2553,14 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return totalCount;
+    }
+  },
+  watch: {
+    search: function search(inputName) {
+      // Items have already been loaded
+      console.log("search");
+      if (inputName === "") return;
+      this.$emit("input-coding-language-and-framework-name", inputName);
     }
   }
 });
@@ -3332,6 +3349,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "QuizCreateCard",
@@ -3340,7 +3359,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      loadFlag: false
+      loadFlag: false,
+      // codingLanguageAndFrameworkEntries: [{"id": 1, "name": "Java"}],
+      codingLanguageAndFrameworkEntries: []
     };
   },
   methods: {
@@ -3356,6 +3377,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.$router.replace("/");
       })["finally"](function () {
         _this.loadFlag = false;
+      });
+    },
+    searchCodingLanguageAndFrameworkByName: function searchCodingLanguageAndFrameworkByName(name) {
+      var _this2 = this;
+
+      this.$store.dispatch("codingLanguageAndFramework/searchCodingLanguageAndFrameworkByName", {
+        name: name
+      }).then(function (response) {
+        _this2.codingLanguageAndFrameworkEntries = response.data;
       });
     }
   }
@@ -4543,6 +4573,16 @@ var codingLanguageAndFrameworkModule = {
         }, {
           root: true
         });
+      });
+    },
+    searchCodingLanguageAndFrameworkByName: function searchCodingLanguageAndFrameworkByName(context, payload) {
+      return (0,_services_api__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        method: "get",
+        url: "coding_language_and_frameworks/search-by-name/" + payload.name
+      }).then(function (response) {
+        console.log("success");
+        console.log(response.data);
+        return response;
       });
     }
   }
@@ -10827,17 +10867,28 @@ var render = function () {
             _c("v-autocomplete", {
               attrs: {
                 label: "記事につけるタグ",
-                items: _vm.items,
+                items: _vm.codingLanguageAndFrameworkEntries,
+                "item-text": "name",
+                "item-value": "id",
+                "search-input": _vm.search,
+                "counter-value": _vm.computedCounterValue,
+                counter: _vm.maxSelected,
+                multiple: "",
                 "hide-no-data": "",
                 "hide-selected": "",
-                counter: _vm.maxSelected,
-                "counter-value": _vm.computedCounterValue,
-                "menu-props": _vm.menuProps,
-                multiple: "",
-                chips: "",
                 "deletable-chips": "",
+                chips: "",
+                "menu-props": _vm.menuProps,
               },
-              on: { input: _vm.adjustOptions },
+              on: {
+                "update:searchInput": function ($event) {
+                  _vm.search = $event
+                },
+                "update:search-input": function ($event) {
+                  _vm.search = $event
+                },
+                input: _vm.adjustOptions,
+              },
               model: {
                 value: _vm.tags,
                 callback: function ($$v) {
@@ -11815,8 +11866,16 @@ var render = function () {
         "v-card-text",
         [
           _c("QuizCreateForm", {
-            attrs: { "load-flag": _vm.loadFlag },
-            on: { "create-quiz": _vm.createQuiz },
+            attrs: {
+              "load-flag": _vm.loadFlag,
+              "coding-language-and-framework-entries":
+                _vm.codingLanguageAndFrameworkEntries,
+            },
+            on: {
+              "create-quiz": _vm.createQuiz,
+              "input-coding-language-and-framework-name":
+                _vm.searchCodingLanguageAndFrameworkByName,
+            },
           }),
         ],
         1
