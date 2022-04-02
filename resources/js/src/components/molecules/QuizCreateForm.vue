@@ -185,15 +185,18 @@
             <v-autocomplete
                 label="記事につけるタグ"
                 v-model="tags"
-                :items="items"
+                :items="codingLanguageAndFrameworkEntries"
+                item-text="name"
+                item-value="id"
+                :search-input.sync="search"
+                :counter-value="computedCounterValue"
+                :counter="maxSelected"
+                multiple
                 hide-no-data
                 hide-selected
-                :counter="maxSelected"
-                :counter-value="computedCounterValue"
-                :menu-props="menuProps"
-                multiple
-                chips
                 deletable-chips
+                chips
+                :menu-props="menuProps"
                 @input="adjustOptions"
             ></v-autocomplete>
             <v-row>
@@ -215,6 +218,10 @@ export default {
     props: {
         loadFlag: {
             type: Boolean
+        },
+        codingLanguageAndFrameworkEntries: {
+            type: Array,
+            default: [],
         }
     },
     data() {
@@ -239,10 +246,10 @@ export default {
                 "選択肢4",
             ],
             tags: [],
-            items: [ "Vue", "JavaScript", "Java"],
             menuProps: {
                 disabled: false
             },
+            search: null,
         }
     },
     methods: {
@@ -268,6 +275,7 @@ export default {
             });
         },
         adjustOptions: function(selectedIds) {
+            console.log("select");
             if (this.computedCounterValue >= this.maxSelected) {
                 this.menuProps.disabled = true
             } else {
@@ -279,8 +287,8 @@ export default {
         computedCounterValue () {
             let totalCount = 0
             if (this.tags && this.tags.length > 0) {
-                const selectedItems = this.tags.map((name) => {
-                return this.items.find((element) => element == name)
+                const selectedItems = this.tags.map((id) => {
+                return this.codingLanguageAndFrameworkEntries.find((element) => element.id == id)
                 })
                 totalCount = selectedItems.reduce(function(prev, cur) {
                 return prev + ((cur.count)? cur.count: 1);
@@ -288,7 +296,16 @@ export default {
             }
             return totalCount
         }
-    }
+    },
+    watch: {
+    search: function (inputName) {
+      // Items have already been loaded
+      console.log("search");
+      if (inputName === "") return;
+
+      this.$emit("input-coding-language-and-framework-name", inputName);
+    },
+  },
 };
 </script>
 <style scoped>

@@ -12,6 +12,8 @@ class CodingLanguageAndFramework extends Model
 
     protected $table = 'coding_languages_and_frameworks';
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = ['name'];
 
     public function tags()
